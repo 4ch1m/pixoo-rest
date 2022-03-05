@@ -1,0 +1,16 @@
+parameters:
+  - name: image
+    description: The image to display. (Automatically gets resized.)
+    in: formData
+    type: file
+    required: true
+  - $ref: '#/definitions/form_param_x'
+  - $ref: '#/definitions/form_param_y'
+  - $ref: '#/definitions/form_param_push_immediately'
+
+responses:
+  '200':
+    description: OK
+
+tags:
+  - draw

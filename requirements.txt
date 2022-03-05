@@ -1,0 +1,7 @@
+python-dotenv==0.19.2
+Ping3==4.0.0
+Flask==2.0.3
+flasgger==0.9.5
+requests==2.27.1
+Pillow==9.0.1
+gunicorn==20.1.0
