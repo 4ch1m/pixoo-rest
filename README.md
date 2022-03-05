@@ -28,7 +28,7 @@ Making it easier to ...
 
 ... from your own applications or home-automation tasks.
 
-**Pixoo REST** makes use of the great [Pixoo Python library](https://github.com/SomethingWithComputers/pixoo) by [SomethingWithComputers](https://github.com/SomethingWithComputers); which offers various convenience features like automatic image conversion. :thumbsup:
+**Pixoo REST** makes use of the great [Pixoo Python library](https://github.com/SomethingWithComputers/pixoo) by [SomethingWithComputers](https://github.com/SomethingWithComputers); which offers various helpful features like automatic image conversion. :thumbsup:
 
 However, it is also possible to simply **pass through** raw JSON-data to the Pixoo's built-in HTTP-API via this Swagger UI.  
 (The Swagger UI will provide handy example payloads (for easy editing) in this case.) 
@@ -37,7 +37,8 @@ However, it is also possible to simply **pass through** raw JSON-data to the Pix
 
 This REST API is by no means a by-the-books reference on how proper REST APIs should be implemented; but simply a "convenience wrapper" for the aforementioned Pixoo library.
 
-The actual HTTP API of the Pixoo device leaves a lot to be desired. :wink:  
+The actual HTTP API of the Pixoo device leaves a lot to be desired.  
+First and foremost proper/official documentation. :wink:  
 Most of the **pass-through** payload objects got discovered via *reverse engineering* or try-and-error.
 
 :warning: Use at your own risk.
@@ -57,7 +58,7 @@ cd pixoo-rest
 
 ### Init
 
-Initialize the [pixoo](https://github.com/SomethingWithComputers/pixoo) submodule:
+Initialize the _pixoo_ submodule:
 ```bash
 git submodule init
 git submodule update
@@ -75,11 +76,11 @@ PIXOO_SCREEN_SIZE=64
 ## Running
 
 The app can now be run ...
-* directly; using your existing (venv-)Python installation
+* :snake: directly; using your existing (venv-)Python installation
 
 or
 
-* inside a dedicated (Docker-)container
+* :package: fully packaged inside a dedicated (Docker-)container
 
 ### Direct
 
