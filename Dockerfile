@@ -8,6 +8,12 @@ FROM python:3.10-slim
 WORKDIR /usr/app
 
 COPY --from=git_clone /pixoo pixoo
+
+RUN pip install \
+          --no-cache-dir \
+          --upgrade \
+          --requirement pixoo/requirements.txt
+
 COPY requirements.txt .
 
 RUN pip install \

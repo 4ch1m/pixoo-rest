@@ -14,6 +14,7 @@
    * [Direct](#direct)
    * [Containerized](#containerized)
 * [Usage](#usage)
+   * [Examples](#examples)
 * [License](#license)
 
 ## Introduction
@@ -116,6 +117,10 @@ Open [http://localhost:5000](http://localhost:5000) in a web browser and make so
 
 _NOTE:_  
 For every executed request you'll get a handy [curl](https://curl.se/) command-line (ideal for reuse in home-automation scripts).
+
+### Examples
+
+A few example (shell-)scripts can be found here: [examples](examples)
 
 ## License
 

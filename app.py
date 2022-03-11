@@ -1,12 +1,10 @@
 import os
-import sys
 import tempfile
 import requests
 import json
 
 from distutils.util import strtobool
 from dotenv import load_dotenv
-from ping3 import ping
 from flask import Flask, request, redirect
 from flasgger import Swagger, swag_from
 from pixoo.pixoo import Channel, Pixoo
@@ -18,10 +16,6 @@ from swag import passthrough
 load_dotenv()
 
 pixoo_host = os.environ.get('PIXOO_HOST', 'Pixoo64')
-
-if not ping(pixoo_host):
-    print(f'[ERROR] unable to reach {pixoo_host}')
-    sys.exit(1)
 
 pixoo = Pixoo(
     pixoo_host,
@@ -92,7 +86,7 @@ def image():
             int(request.form.get('y'))
         )
 
-        _push_immediately(request)
+    _push_immediately(request)
 
     return 'OK'
 
