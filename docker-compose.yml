@@ -9,3 +9,4 @@ services:
     environment:
       - PIXOO_HOST=${PIXOO_HOST:-pixoo}
       - PIXOO_SCREEN_SIZE=${PIXOO_SCREEN_SIZE:-64}
+    restart: unless-stopped
