@@ -76,15 +76,11 @@ def generic_set_number(number):
 @app.route('/image', methods=['POST'])
 @swag_from('swag/draw/image.yml')
 def image():
-    request_image = Image.open(request.files['image'].stream)
-
-    with tempfile.NamedTemporaryFile() as tmp_file:
-        request_image.save(tmp_file, request_image.format)
-        pixoo.draw_image_at_location(
-            tmp_file.name,
-            int(request.form.get('x')),
-            int(request.form.get('y'))
-        )
+    pixoo.draw_image_at_location(
+        Image.open(request.files['image'].stream),
+        int(request.form.get('x')),
+        int(request.form.get('y'))
+    )
 
     _push_immediately(request)
 
