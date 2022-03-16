@@ -125,7 +125,7 @@ draw_send_http_gif = f"""{{
   "PicID": 1000,
   "PicSpeed": 100,
   "PicData": "{ Path('swag/pic_data.base64').read_text() }"
-}}""", "Send text to device. (NOTE: Multiple JSON objects can be sent at once here; 'PicOffset' should be incremented then; 'PicNum' should match the total number of GIFs.)"
+}}""", "Send animation to device. (NOTE: Multiple JSON objects can be sent at once here; 'PicOffset' should be incremented then; 'PicNum' should match the total number of GIFs.)"
 
 draw_clear_http_text = """{
   "Command":"Draw/ClearHttpText"
