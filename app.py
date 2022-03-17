@@ -1,6 +1,7 @@
 import os
 import requests
 import json
+import base64
 
 from distutils.util import strtobool
 from dotenv import load_dotenv
@@ -187,7 +188,7 @@ def character():
 
 
 @app.route('/sendText', methods=['POST'])
-@swag_from('swag/send_text.yml')
+@swag_from('swag/send/text.yml')
 def send_text():
     pixoo.send_text(
         request.form.get('text'),
@@ -199,6 +200,61 @@ def send_text():
         (int(request.form.get('movement_speed'))),
         (int(request.form.get('direction')))
     )
+
+    return 'OK'
+
+
+# every uploaded GIF needs to have a unique/incremental id (otherwise it won't be displayed);
+# not sure how to acquire the currently used ids from the device, so we're simply starting with this id
+_gif_id = 666
+
+
+def _get_gif_id():
+    global _gif_id
+    _gif_id += 1
+    return _gif_id
+
+
+def _send_gif(id, num, offset, width, speed, data):
+    return requests.post(f'http://{pixoo.address}/post', json.dumps({
+        "Command": "Draw/SendHttpGif",
+        "PicID": id,
+        "PicNum": num,
+        "PicOffset": offset,
+        "PicWidth": width,
+        "PicSpeed": speed,
+        "PicData": data
+    })).json()
+
+
+@app.route('/sendGif', methods=['POST'])
+@swag_from('swag/send/gif.yml')
+def send_gif():
+    gif = Image.open(request.files['gif'].stream)
+    speed = int(request.form.get('speed'))
+
+    if gif.is_animated:
+        gif_id = _get_gif_id()
+
+        for i in range(gif.n_frames):
+            gif.seek(i)
+
+            if gif.size not in ((16, 16), (32, 32), (64, 64)):
+                gif_frame = gif.resize((pixoo.size, pixoo.size)).convert("RGB")
+            else:
+                gif_frame = gif.convert("RGB")
+
+            _send_gif(
+                gif_id,
+                gif.n_frames,
+                i,
+                gif_frame.width,
+                speed,
+                base64.b64encode(gif_frame.tobytes()).decode("utf-8")
+            )
+    else:
+        pixoo.draw_image(gif)
+        pixoo.push()
 
     return 'OK'
 

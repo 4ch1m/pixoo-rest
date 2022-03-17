@@ -25,6 +25,7 @@ Making it easier to ...
 
 * :pencil2: **draw** pixels, lines, rectangles, and text
 * :framed_picture: quickly **upload** images
+* :film_strip: **play** animations using GIFs 
 * :gear: **set** the device's channel, brightness, etc.
 
 ... from your own applications or home-automation tasks.
