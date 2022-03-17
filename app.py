@@ -201,21 +201,16 @@ def send_text():
     return 'OK'
 
 
-# every uploaded GIF needs to have a unique/incremental id (otherwise it won't be displayed);
-# not sure how to acquire the currently used ids from the device, so we're simply starting with this id
-_gif_id = 666
+def _reset_gif():
+    return requests.post(f'http://{pixoo.address}/post', json.dumps({
+        "Command": "Draw/ResetHttpGifId"
+    })).json()
 
 
-def _get_gif_id():
-    global _gif_id
-    _gif_id += 1
-    return _gif_id
-
-
-def _send_gif(id, num, offset, width, speed, data):
+def _send_gif(num, offset, width, speed, data):
     return requests.post(f'http://{pixoo.address}/post', json.dumps({
         "Command": "Draw/SendHttpGif",
-        "PicID": id,
+        "PicID": 1,
         "PicNum": num,
         "PicOffset": offset,
         "PicWidth": width,
@@ -231,7 +226,7 @@ def send_gif():
     speed = int(request.form.get('speed'))
 
     if gif.is_animated:
-        gif_id = _get_gif_id()
+        _reset_gif()
 
         for i in range(gif.n_frames):
             gif.seek(i)
@@ -242,7 +237,6 @@ def send_gif():
                 gif_frame = gif.convert("RGB")
 
             _send_gif(
-                gif_id,
                 gif.n_frames,
                 i,
                 gif_frame.width,
