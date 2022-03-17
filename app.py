@@ -1,8 +1,10 @@
 import os
+import time
 import requests
 import json
 import base64
 
+from datetime import datetime
 from distutils.util import strtobool
 from dotenv import load_dotenv
 from flask import Flask, request, redirect
@@ -16,12 +18,7 @@ from swag import passthrough
 load_dotenv()
 
 pixoo_host = os.environ.get('PIXOO_HOST', 'Pixoo64')
-
-pixoo = Pixoo(
-    pixoo_host,
-    int(os.environ.get('PIXOO_SCREEN_SIZE', 64)),
-    True
-)
+pixoo_debug = os.environ.get('PIXOO_DEBUG', 'false').lower() == 'true'
 
 app = Flask(__name__)
 app.config['SWAGGER'] = {
@@ -301,4 +298,20 @@ def passthrough_{list(passthrough_routes.keys()).index(_route)}():
 
 
 if __name__ == '__main__':
+    while True:
+        try:
+            print(f'[ {datetime.now().strftime("%Y-%m-%d (%H:%M:%S)")} ] Trying to connect to "{pixoo_host}" ... ', end='')
+            if requests.get(f'http://{pixoo_host}/get').status_code == 200:
+                print('OK.')
+                break
+        except:
+            print('FAILED. (Sleeping 30 seconds.)')
+            time.sleep(30)
+
+    pixoo = Pixoo(
+        pixoo_host,
+        int(os.environ.get('PIXOO_SCREEN_SIZE', 64)),
+        pixoo_debug
+    )
+
     app.run()
