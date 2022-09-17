@@ -5,6 +5,8 @@ RUN git clone https://github.com/SomethingWithComputers/pixoo.git /pixoo
 
 FROM python:3.10-slim
 
+RUN apt-get update && apt-get install --yes --no-install-recommends curl
+
 WORKDIR /usr/app
 
 COPY --from=git_clone /pixoo pixoo
