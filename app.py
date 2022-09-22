@@ -5,7 +5,6 @@ import json
 import base64
 
 from datetime import datetime
-from distutils.util import strtobool
 from dotenv import load_dotenv
 from flask import Flask, request, redirect
 from flasgger import Swagger, swag_from
@@ -50,8 +49,17 @@ swagger = Swagger(app)
 definitions.create(swagger)
 
 
+def _parse_bool_value(value):
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        return value.strip().lower() in {'true', 'yes', '1'}
+    else:
+        raise ValueError(f'expected bool or string; got {type(value)}')
+
+
 def _push_immediately(_request):
-    if strtobool(_request.form.get('push_immediately', default=True)):
+    if _parse_bool_value(_request.form.get('push_immediately', default=True)):
         pixoo.push()
 
 
@@ -240,11 +248,12 @@ def _send_gif(num, offset, width, speed, data):
 def send_gif():
     gif = Image.open(request.files['gif'].stream)
     speed = int(request.form.get('speed'))
+    skip_first_frame = _parse_bool_value(request.form.get('skip_first_frame', default=False))
 
     if gif.is_animated:
         _reset_gif()
 
-        for i in range(gif.n_frames):
+        for i in range(1 if skip_first_frame else 0, gif.n_frames):
             gif.seek(i)
 
             if gif.size not in ((16, 16), (32, 32), (64, 64)):
@@ -253,8 +262,8 @@ def send_gif():
                 gif_frame = gif.convert("RGB")
 
             _send_gif(
-                gif.n_frames,
-                i,
+                gif.n_frames + (-1 if skip_first_frame else 0),
+                i + (-1 if skip_first_frame else 0),
                 gif_frame.width,
                 speed,
                 base64.b64encode(gif_frame.tobytes()).decode("utf-8")

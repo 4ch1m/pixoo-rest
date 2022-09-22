@@ -12,6 +12,12 @@ parameters:
     minimum: '0'
     default: 100
     required: true
+  - name: skip_first_frame
+    description: Workaround for resized GIF images. Might help if the animation looks 'glitchy' due to a faulty converted background-frame (= first frame) in the original GIF.
+    in: formData
+    type: boolean
+    default: false
+    required: false
 
 responses:
   '200':
