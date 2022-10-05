@@ -4,7 +4,6 @@ import requests
 import json
 import base64
 
-from datetime import datetime
 from dotenv import load_dotenv
 from flask import Flask, request, redirect
 from flasgger import Swagger, swag_from
@@ -14,20 +13,15 @@ from PIL import Image
 from swag import definitions
 from swag import passthrough
 
+from _helpers import parse_bool_value, get_swagger_config, try_to_request
+
 load_dotenv()
 
 pixoo_host = os.environ.get('PIXOO_HOST', 'Pixoo64')
-pixoo_debug = os.environ.get('PIXOO_DEBUG', 'false').lower() == 'true'
+pixoo_debug = parse_bool_value(os.environ.get('PIXOO_DEBUG', 'false'))
 
-while True:
-    try:
-        print(f'[ {datetime.now().strftime("%Y-%m-%d (%H:%M:%S)")} ] Trying to connect to "{pixoo_host}" ... ', end='')
-        if requests.get(f'http://{pixoo_host}/get').status_code == 200:
-            print('OK.')
-            break
-    except:
-        print('FAILED. (Sleeping 30 seconds.)')
-        time.sleep(30)
+while not try_to_request(f'http://{pixoo_host}/get'):
+    time.sleep(30)
 
 pixoo = Pixoo(
     pixoo_host,
@@ -36,30 +30,14 @@ pixoo = Pixoo(
 )
 
 app = Flask(__name__)
-app.config['SWAGGER'] = {
-    'title': 'Pixoo REST',
-    'version': '1.0.0',
-    'description': 'A RESTful API to easily interact with the Wi-Fi enabled {} devices.'.format(
-        '<a href="https://www.divoom.com/de/products/pixoo-64">Divoom Pixoo</a>'
-    ),
-    'termsOfService': ''
-}
+app.config['SWAGGER'] = get_swagger_config()
 
 swagger = Swagger(app)
 definitions.create(swagger)
 
 
-def _parse_bool_value(value):
-    if isinstance(value, bool):
-        return value
-    if isinstance(value, str):
-        return value.strip().lower() in {'true', 'yes', '1'}
-    else:
-        raise ValueError(f'expected bool or string; got {type(value)}')
-
-
 def _push_immediately(_request):
-    if _parse_bool_value(_request.form.get('push_immediately', default=True)):
+    if parse_bool_value(_request.form.get('push_immediately', default=True)):
         pixoo.push()
 
 
@@ -82,14 +60,23 @@ def brightness(percentage):
 @app.route('/clock/<int:number>', methods=['PUT'])
 @swag_from('swag/set/generic_number.yml')
 def generic_set_number(number):
-    if request.path.startswith('/channel'):
+    if request.path.startswith('/channel/'):
         pixoo.set_channel(Channel(number))
-    elif request.path.startswith('/face'):
+    elif request.path.startswith('/face/'):
         pixoo.set_face(number)
-    elif request.path.startswith('/visualizer'):
+    elif request.path.startswith('/visualizer/'):
         pixoo.set_visualizer(number)
-    elif request.path.startswith('/clock'):
+    elif request.path.startswith('/clock/'):
         pixoo.set_clock(number)
+
+    return 'OK'
+
+
+@app.route('/screen/on/<boolean>', methods=['PUT'])
+@swag_from('swag/set/generic_boolean.yml')
+def generic_set_boolean(boolean):
+    if request.path.startswith('/screen/on/'):
+        pixoo.set_screen(parse_bool_value(boolean))
 
     return 'OK'
 
@@ -248,7 +235,7 @@ def _send_gif(num, offset, width, speed, data):
 def send_gif():
     gif = Image.open(request.files['gif'].stream)
     speed = int(request.form.get('speed'))
-    skip_first_frame = _parse_bool_value(request.form.get('skip_first_frame', default=False))
+    skip_first_frame = parse_bool_value(request.form.get('skip_first_frame', default=False))
 
     if gif.is_animated:
         _reset_gif()
@@ -290,6 +277,8 @@ passthrough_routes = {
     '/passthrough/sys/timeZone': passthrough.create(*passthrough.sys_timezone),
     # device ...
     '/passthrough/device/setUTC': passthrough.create(*passthrough.device_set_utc),
+    '/passthrough/device/SetScreenRotationAngle': passthrough.create(*passthrough.device_set_screen_rotation_angle),
+    '/passthrough/device/SetMirrorMode': passthrough.create(*passthrough.device_set_mirror_mode),
     # tools ...
     '/passthrough/tools/setTimer': passthrough.create(*passthrough.tools_set_timer),
     '/passthrough/tools/setStopWatch': passthrough.create(*passthrough.tools_set_stop_watch),

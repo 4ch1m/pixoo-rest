@@ -6,6 +6,7 @@
 
 * [Introduction](#introduction)
 * [Disclaimer](#disclaimer)
+* [Changelog](#changelog)
 * [Getting started](#getting-started)
    * [Clone](#clone)
    * [Init](#init)
@@ -44,6 +45,10 @@ First and foremost proper/official documentation. :wink:
 Most of the **pass-through** payload objects got discovered via *reverse engineering* or try-and-error.
 
 :warning: Use at your own risk.
+
+## Changelog
+
+A (more or less) detailed changelog can be found here: [:open_book:](CHANGELOG.md)
 
 ## Getting started
 
@@ -121,7 +126,7 @@ For every executed request you'll get a handy [curl](https://curl.se/) command-l
 
 ### Examples
 
-A few example (shell-)scripts can be found here: [examples](examples)
+A few example (shell-)scripts can be found here: [:toolbox:](examples)
 
 ## License
 

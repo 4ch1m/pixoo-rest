@@ -80,6 +80,16 @@ device_set_utc = """{
   "Utc": 1672416000
 }""", "Set UTC."
 
+device_set_screen_rotation_angle = """{
+  "Command": "Device/SetScreenRotationAngle",
+  "Mode": 0
+}""", "Set screen rotation angle. (mode: 0=normal, 1=90°, 2=180°, 3=270°)"
+
+device_set_mirror_mode = """{
+  "Command":"Device/SetMirrorMode",
+  "Mode": 0
+}""", "Set screen mirror mode. (mode: 0=disable, 1=enable)"
+
 tools_set_timer = """{
   "Command":"Tools/SetTimer",
   "Minute": 1,
