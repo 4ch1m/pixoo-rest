@@ -18,6 +18,7 @@ COPY --from=git_clone /pixoo pixoo
 COPY requirements.txt .
 
 RUN pip install \
+          --root-user-action=ignore \
           --no-cache-dir \
           --upgrade \
           --requirement pixoo/requirements.txt \
@@ -25,6 +26,7 @@ RUN pip install \
 
 COPY swag swag/
 COPY _helpers.py .
+COPY version.txt .
 COPY app.py .
 
 HEALTHCHECK --interval=5m --timeout=3s \

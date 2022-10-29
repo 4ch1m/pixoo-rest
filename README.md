@@ -42,7 +42,7 @@ This REST API is by no means a by-the-books reference on how proper REST APIs sh
 
 The actual HTTP API of the Pixoo device leaves a lot to be desired.  
 First and foremost proper/official documentation. :wink:  
-Most of the **pass-through** payload objects got discovered via *reverse engineering* or try-and-error.
+Most of the **pass-through** payload objects got discovered via *reverse engineering*, try-and-error, or this website: [doc.divoom-gz.com](http://doc.divoom-gz.com/web/#/1).
 
 :warning: Use at your own risk.
 
@@ -73,11 +73,25 @@ git submodule update
 
 ### Configure
 
-Create an `.env`-file alongside the [app.py](app.py)-file and put your individual settings in it; like so:
+Create an `.env`-file alongside the [app.py](app.py)-file / [docker-compose.yml](docker-compose.yml)-file and put your individual settings in it; like so:
 ```properties
-PIXOO_REST_PORT=5000
+# MANDATORY: the hostname of your Pixoo device; defaults to "Pixoo64" if omitted
 PIXOO_HOST=192.168.178.11
+
+# OPTIONAL: enable debug mode for the Pixoo-library; defaults to "false" if omitted
+PIXOO_DEBUG=true
+
+# OPTIONAL: the screen size of your Pixoo device (which gets passed to the Pixoo-library); defaults to "64" if omitted
 PIXOO_SCREEN_SIZE=64
+
+# OPTIONAL: enable (Flask) debug mode for the REST-app; defaults to "false" if omitted
+PIXOO_REST_DEBUG=true
+
+# OPTIONAL: the hostname to listen on; defaults to "127.0.0.1" if omitted
+PIXOO_REST_HOST=0.0.0.0
+
+# OPTIONAL: the port being used; defaults to "5000" if omitted
+PIXOO_REST_PORT=5000
 ```
 
 ## Running

@@ -86,12 +86,49 @@ device_set_screen_rotation_angle = """{
 }""", "Set screen rotation angle. (mode: 0=normal, 1=90°, 2=180°, 3=270°)"
 
 device_set_mirror_mode = """{
-  "Command":"Device/SetMirrorMode",
+  "Command": "Device/SetMirrorMode",
   "Mode": 0
 }""", "Set screen mirror mode. (mode: 0=disable, 1=enable)"
 
+device_get_device_time = """{
+  "Command": "Device/GetDeviceTime"
+}""", "Get the device system time."
+
+device_set_dis_temp_mode = """{
+  "Command": "Device/SetDisTempMode",
+  "Mode": 0
+}""", "Set temperature mode. (mode: 0=Celcius, 1=Fahrenheit)"
+
+device_set_time_24_flag = """{
+  "Command": "Device/SetTime24Flag",
+  "Mode": 0
+}""", "Set hours display mode. (mode: 0=12 hours, 1=24 hours)"
+
+device_set_high_light_mode = """{
+  "Command": "Device/SetHighLightMode",
+  "Mode": 0
+}""", "Set screen high light mode. (mode: 0=close, 1=open)"
+
+device_set_white_balance = """{
+  "Command": "Device/SetWhiteBalance",
+  "RValue": 100,
+  "GValue": 100,
+  "BValue": 100
+}""", "Set screen 'white balance'."
+
+device_get_weather_info = """{
+  "Command": "Device/GetWeatherInfo"
+}""", "Get weather information."
+
+device_play_buzzer = """{
+  "Command": "Device/PlayBuzzer",
+  "ActiveTimeInCycle": 500,
+  "OffTimeInCycle": 500,
+  "PlayTotalTime": 3000
+}""", "Play the buzzer. (Parameter times are milliseconds.)"
+
 tools_set_timer = """{
-  "Command":"Tools/SetTimer",
+  "Command": "Tools/SetTimer",
   "Minute": 1,
   "Second": 0,
   "Status": 1
@@ -103,7 +140,7 @@ tools_set_stop_watch = """{
 }""", "Control the stopwatch. (status: 2=reset, 1=start, 0=stop)"
 
 tools_set_score_board = """{
-  "Command":"Tools/SetScoreBoard",
+  "Command": "Tools/SetScoreBoard",
   "BlueScore": 100,
   "RedScore": 79
 }""", "Control the score board. (score: 0 to 999)"
@@ -138,9 +175,9 @@ draw_send_http_gif = f"""{{
 }}""", "Send animation to device. (NOTE: Multiple JSON objects can be sent at once here; 'PicOffset' should be incremented then; 'PicNum' should match the total number of GIFs.)"
 
 draw_clear_http_text = """{
-  "Command":"Draw/ClearHttpText"
+  "Command": "Draw/ClearHttpText"
 }""", "Clear all text."
 
 draw_reset_http_gif_id = """{
-  "Command":"Draw/ResetHttpGifId"
+  "Command": "Draw/ResetHttpGifId"
 }""", "Reset GIF id."

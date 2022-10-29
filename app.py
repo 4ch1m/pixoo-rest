@@ -279,6 +279,13 @@ passthrough_routes = {
     '/passthrough/device/setUTC': passthrough.create(*passthrough.device_set_utc),
     '/passthrough/device/SetScreenRotationAngle': passthrough.create(*passthrough.device_set_screen_rotation_angle),
     '/passthrough/device/SetMirrorMode': passthrough.create(*passthrough.device_set_mirror_mode),
+    '/passthrough/device/getDeviceTime': passthrough.create(*passthrough.device_get_device_time),
+    '/passthrough/device/setDisTempMode': passthrough.create(*passthrough.device_set_dis_temp_mode),
+    '/passthrough/device/setTime24Flag': passthrough.create(*passthrough.device_set_time_24_flag),
+    '/passthrough/device/setHighLightMode': passthrough.create(*passthrough.device_set_high_light_mode),
+    '/passthrough/device/setWhiteBalance': passthrough.create(*passthrough.device_set_white_balance),
+    '/passthrough/device/getWeatherInfo': passthrough.create(*passthrough.device_get_weather_info),
+    '/passthrough/device/playBuzzer': passthrough.create(*passthrough.device_play_buzzer),
     # tools ...
     '/passthrough/tools/setTimer': passthrough.create(*passthrough.tools_set_timer),
     '/passthrough/tools/setStopWatch': passthrough.create(*passthrough.tools_set_stop_watch),
@@ -306,4 +313,9 @@ def passthrough_{list(passthrough_routes.keys()).index(_route)}():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(
+        debug=parse_bool_value(os.environ.get('PIXOO_REST_DEBUG', 'false')),
+        host=os.environ.get('PIXOO_REST_HOST', '127.0.0.1'),
+        port=os.environ.get('PIXOO_REST_PORT', '5000')
+    )
+

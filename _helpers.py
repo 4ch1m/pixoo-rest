@@ -1,6 +1,7 @@
 import requests
 
 from datetime import datetime
+from pathlib import Path
 
 
 def parse_bool_value(value):
@@ -15,7 +16,7 @@ def parse_bool_value(value):
 def get_swagger_config():
     return {
         'title': 'Pixoo REST',
-        'version': '1.1.0',
+        'version': Path('version.txt').read_text(),
         'description': 'A RESTful API to easily interact with the Wi-Fi enabled {} devices.'.format(
             '<a href="https://www.divoom.com/de/products/pixoo-64">Divoom Pixoo</a>'
         ),
