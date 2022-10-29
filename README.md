@@ -42,7 +42,7 @@ This REST API is by no means a by-the-books reference on how proper REST APIs sh
 
 The actual HTTP API of the Pixoo device leaves a lot to be desired.  
 First and foremost proper/official documentation. :wink:  
-Most of the **pass-through** payload objects got discovered via *reverse engineering*, try-and-error, or this website: [doc.divoom-gz.com](http://doc.divoom-gz.com/web/#/1).
+Most of the **pass-through** payload objects got discovered via *reverse engineering*, try-and-error, or this website: [doc.divoom-gz.com](http://doc.divoom-gz.com/web/#/12?page_id=143).
 
 :warning: Use at your own risk.
 
