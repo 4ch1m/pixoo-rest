@@ -65,10 +65,9 @@ cd pixoo-rest
 
 ### Init
 
-Initialize the _pixoo_ submodule:
+Update/initialize the _pixoo_ submodule:
 ```bash
-git submodule init
-git submodule update
+git submodule update --init
 ```
 
 ### Configure

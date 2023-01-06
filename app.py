@@ -13,31 +13,32 @@ from PIL import Image
 from swag import definitions
 from swag import passthrough
 
-from _helpers import parse_bool_value, get_swagger_config, try_to_request
+import _helpers
 
 load_dotenv()
 
 pixoo_host = os.environ.get('PIXOO_HOST', 'Pixoo64')
-pixoo_debug = parse_bool_value(os.environ.get('PIXOO_DEBUG', 'false'))
+pixoo_screen = int(os.environ.get('PIXOO_SCREEN_SIZE', 64))
+pixoo_debug = _helpers.parse_bool_value(os.environ.get('PIXOO_DEBUG', 'false'))
 
-while not try_to_request(f'http://{pixoo_host}/get'):
+while not _helpers.try_to_request(f'http://{pixoo_host}/get'):
     time.sleep(30)
 
 pixoo = Pixoo(
     pixoo_host,
-    int(os.environ.get('PIXOO_SCREEN_SIZE', 64)),
+    pixoo_screen,
     pixoo_debug
 )
 
 app = Flask(__name__)
-app.config['SWAGGER'] = get_swagger_config()
+app.config['SWAGGER'] = _helpers.get_swagger_config()
 
-swagger = Swagger(app)
+swagger = Swagger(app, template=_helpers.get_additional_swagger_template())
 definitions.create(swagger)
 
 
 def _push_immediately(_request):
-    if parse_bool_value(_request.form.get('push_immediately', default=True)):
+    if _helpers.parse_bool_value(_request.form.get('push_immediately', default=True)):
         pixoo.push()
 
 
@@ -76,7 +77,7 @@ def generic_set_number(number):
 @swag_from('swag/set/generic_boolean.yml')
 def generic_set_boolean(boolean):
     if request.path.startswith('/screen/on/'):
-        pixoo.set_screen(parse_bool_value(boolean))
+        pixoo.set_screen(_helpers.parse_bool_value(boolean))
 
     return 'OK'
 
@@ -235,7 +236,7 @@ def _send_gif(num, offset, width, speed, data):
 def send_gif():
     gif = Image.open(request.files['gif'].stream)
     speed = int(request.form.get('speed'))
-    skip_first_frame = parse_bool_value(request.form.get('skip_first_frame', default=False))
+    skip_first_frame = _helpers.parse_bool_value(request.form.get('skip_first_frame', default=False))
 
     if gif.is_animated:
         _reset_gif()
@@ -312,9 +313,33 @@ def passthrough_{list(passthrough_routes.keys()).index(_route)}():
         """)
 
 
+@app.route('/divoom/device/lan', methods=['POST'])
+@swag_from('swag/divoom/device/return_same_lan_device.yml')
+def divoom_return_same_lan_device():
+    return _helpers.divoom_api_call('Device/ReturnSameLANDevice').json()
+
+
+@app.route('/divoom/channel/dial/types', methods=['POST'])
+@swag_from('swag/divoom/channel/get_dial_type.yml')
+def divoom_get_dial_type():
+    return _helpers.divoom_api_call('Channel/GetDialType').json()
+
+
+@app.route('/divoom/channel/dial/list', methods=['POST'])
+@swag_from('swag/divoom/channel/get_dial_list.yml')
+def divoom_get_dial_list():
+    return _helpers.divoom_api_call(
+        'Channel/GetDialList',
+        {
+            'DialType': request.form.get('dial_type', default='Game'),
+            'Page': int(request.form.get('page_number', default='1'))
+        }
+    ).json()
+
+
 if __name__ == '__main__':
     app.run(
-        debug=parse_bool_value(os.environ.get('PIXOO_REST_DEBUG', 'false')),
+        debug=_helpers.parse_bool_value(os.environ.get('PIXOO_REST_DEBUG', 'false')),
         host=os.environ.get('PIXOO_REST_HOST', '127.0.0.1'),
         port=os.environ.get('PIXOO_REST_PORT', '5000')
     )

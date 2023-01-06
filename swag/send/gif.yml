@@ -1,4 +1,5 @@
-description: "NOTE: The GIF should have max 60 animation frames."
+description: 'NOTE: The GIF should have max 60 animation frames.'
+
 parameters:
   - name: gif
     description: The animated GIF image to display. (Automatically gets resized.)

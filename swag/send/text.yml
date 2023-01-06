@@ -1,4 +1,5 @@
 description: "NOTE: This way of sending text to the device seems unreliable atm. The 'draw text' method is a better alternative."
+
 parameters:
   - name: text
     description: The text to display.

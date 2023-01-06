@@ -1,7 +1,10 @@
 import requests
+import json
 
 from datetime import datetime
 from pathlib import Path
+
+divoom_api_url = 'https://app.divoom-gz.com'
 
 
 def parse_bool_value(value):
@@ -24,6 +27,33 @@ def get_swagger_config():
     }
 
 
+def get_additional_swagger_template():
+    return {
+        'tags': [
+            {
+                'name': 'draw',
+                'description': 'draw lines, pixels, rectangles, etc. on your Pixoo'
+            },
+            {
+                'name': 'send',
+                'description': 'send text, GIFs, etc. to your Pixoo'
+            },
+            {
+                'name': 'set',
+                'description': 'set brightness, channel, clock, etc. on your Pixoo'
+            },
+            {
+                'name': 'pass-through',
+                'description': "directly pass commands to your Pixoo's built-in HTTP-API"
+            },
+            {
+                'name': 'divoom',
+                'description': f'send requests to the external vendor API ({divoom_api_url})'
+            }
+        ]
+    }
+
+
 def try_to_request(url):
     try:
         print(f'[ {datetime.now().strftime("%Y-%m-%d (%H:%M:%S)")} ] Trying to request "{url}" ... ', end='')
@@ -34,3 +64,10 @@ def try_to_request(url):
     except:
         print('FAILED.')
         return False
+
+
+def divoom_api_call(endpoint, payload=None):
+    return requests.post(
+        f'{divoom_api_url}/{endpoint}',
+        json.dumps(payload)
+    )

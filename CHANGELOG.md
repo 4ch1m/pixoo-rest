@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0 (2023-01-06)
+
+* new: 'divoom' section (query official [API](https://app.divoom-gz.com))
+* dependency updates
+* other minor improvements
+
 ## 1.2.0 (2022-10-29)
 
 * new environment settings `PIXOO_REST_HOST` and `PIXOO_REST_DEBUG` (see [README](README.md))
