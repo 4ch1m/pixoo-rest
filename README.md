@@ -2,7 +2,7 @@
 
 > A RESTful API to easily interact with the Wi-Fi enabled [Divoom Pixoo](https://www.divoom.com/de/products/pixoo-64) devices.
 
-# Table of Contents
+## Table of Contents
 
 * [Introduction](#introduction)
 * [Disclaimer](#disclaimer)
