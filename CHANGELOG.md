@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.1 (2023-03-21)
+
+* dependency updates
+* "restart" directive removed from [docker-compose.yml](docker-compose.yml) 
+
 ## 1.3.0 (2023-01-06)
 
 * new: 'divoom' section (query official [API](https://app.divoom-gz.com))
