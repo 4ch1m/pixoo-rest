@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.3 (2023-05-06)
+
+* dependency updates
+
 ## 1.3.2 (2023-03-21)
 
 * fix dependency conflict (_flasgger_ requires _Pillow_ 9.2.0)
