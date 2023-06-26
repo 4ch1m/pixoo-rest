@@ -1,6 +1,6 @@
 python-dotenv == 1.0.0
 Flask == 2.3.2
-requests == 2.30.0
+requests == 2.31.0
 Pillow == 9.5.0
 gunicorn == 20.1.0
-flasgger @ git+https://github.com/flasgger/flasgger.git@f5de71b757966fb1cc5317d1e84e1be7d6400bc6
+flasgger @ git+https://github.com/flasgger/flasgger.git@3c16b776f4848813209f2704b18cba81762ac030

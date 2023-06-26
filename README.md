@@ -124,7 +124,7 @@ python app.py
 
 Simply execute ...
 ```bash
-docker-compose up
+docker compose up
 ```
 ... to automatically build the container and run it.
 

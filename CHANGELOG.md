@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.4 (2023-06-26)
+
+* dependency updates
+
 ## 1.3.3 (2023-05-06)
 
 * dependency updates
