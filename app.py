@@ -95,6 +95,24 @@ def image():
 
     return 'OK'
 
+@app.route('/imageurl', methods=['POST'])
+@swag_from('swag/draw/imageurl.yml')
+def imageurl():
+    url = request.form.get('imageurl')
+    response = requests.get(url, stream=True)
+    response.raise_for_status()
+
+    image = Image.open(response.raw)
+
+    pixoo.draw_image_at_location(
+        image,
+        int(request.form.get('x')),
+        int(request.form.get('y'))
+    )
+
+    _push_immediately(request)
+
+    return 'OK'
 
 @app.route('/text', methods=['POST'])
 @swag_from('swag/draw/text.yml')

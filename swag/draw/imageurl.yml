@@ -1,0 +1,19 @@
+parameters:
+  - name: imageurl
+    description: The url of the image to display. (Image automatically gets resized.)
+    in: formData
+    type: string
+    minLength: 8
+    maxLength: 1024
+    default: X
+    required: true
+  - $ref: "#/definitions/form_param_x"
+  - $ref: "#/definitions/form_param_y"
+  - $ref: "#/definitions/form_param_push_immediately"
+
+responses:
+  "200":
+    description: OK
+
+tags:
+  - draw
