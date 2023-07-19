@@ -4,3 +4,6 @@ venv
 .venv
 pixoo
 .env
+
+# macOS
+.DS_Store
