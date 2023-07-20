@@ -5,7 +5,7 @@ import json
 import base64
 
 from dotenv import load_dotenv
-from flask import Flask, request, redirect
+from flask import Flask, request, redirect, abort
 from flasgger import Swagger, swag_from
 from pixoo.pixoo import Channel, Pixoo
 from PIL import Image
@@ -99,18 +99,27 @@ def image():
 @swag_from('swag/draw/imageurl.yml')
 def imageurl():
     url = request.form.get('imageurl')
-    response = requests.get(url, stream=True)
-    response.raise_for_status()
+    try:
+        response = requests.get(url, stream=True, timeout=30)
+        response.raise_for_status()
 
-    image = Image.open(response.raw)
+        image = Image.open(response.raw)
 
-    pixoo.draw_image_at_location(
-        image,
-        int(request.form.get('x')),
-        int(request.form.get('y'))
-    )
+        pixoo.draw_image_at_location(
+            image,
+            int(request.form.get('x')),
+            int(request.form.get('y'))
+        )
 
-    _push_immediately(request)
+        _push_immediately(request)
+
+    except requests.exceptions.Timeout:
+        # Handle timeout exception
+        abort(408)
+
+    except Exception as e:
+        # Return HTTP 500 error
+        abort(500)
 
     return 'OK'
 

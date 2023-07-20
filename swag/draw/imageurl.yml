@@ -1,6 +1,6 @@
 parameters:
   - name: imageurl
-    description: The url of the image to display. (Image automatically gets resized.)
+    description: The url of the image to display. (Image automatically gets resized. Timeout for download is 30 seconds.)
     in: formData
     type: string
     minLength: 8
@@ -14,6 +14,10 @@ parameters:
 responses:
   "200":
     description: OK
+  "408":
+    description: Image Download took longer than 30 seconds
+  "500":
+    description: There was an error while downloading the image or sending it to Pixoo
 
 tags:
   - draw
