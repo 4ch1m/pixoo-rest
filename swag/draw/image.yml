@@ -1,16 +1,38 @@
 parameters:
   - name: image
-    description: The image to display. (Automatically gets resized.)
+    description: The image to display. (Automatically gets resized.) Can be a file or a URL.
     in: formData
-    type: file
+    type: string
     required: true
-  - $ref: '#/definitions/form_param_x'
-  - $ref: '#/definitions/form_param_y'
-  - $ref: '#/definitions/form_param_push_immediately'
+    default: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+    # Using 'anyOf' to allow either a file or a URL
+    # Adjust the 'type' and 'format' as per your requirements
+    anyOf:
+      - type: file
+      - type: string
+        format: url
+  - $ref: "#/definitions/form_param_x"
+  - $ref: "#/definitions/form_param_y"
+  - name: speed
+    description: Animation speed (in milliseconds). Needed if the file is a GIF animation. If the parameter is not set in the REST API call, the default is 100 ms.
+    in: formData
+    type: integer
+    minimum: "0"
+    default: 100
+    required: false
+  - name: skip_first_frame
+    description: Workaround for resized GIF images. Might help if the animation looks 'glitchy' due to a faulty converted background-frame (= first frame) in the original GIF.
+    in: formData
+    type: boolean
+    default: false
+    required: false
+  - $ref: "#/definitions/form_param_push_immediately"
 
 responses:
-  '200':
+  "200":
     description: OK
+  "400":
+    description: Error downloading the image or Image Download took longer than 30 seconds or Invalid input for the 'image' parameter.
 
 tags:
   - draw
