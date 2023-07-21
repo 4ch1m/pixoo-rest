@@ -52,7 +52,7 @@ def get_additional_swagger_template():
             },
             {
                 'name': 'download',
-                'description': f'automatically download and send resources to your Pixoo'
+                'description': 'automatically download and send resources to your Pixoo'
             }
         ]
     }
