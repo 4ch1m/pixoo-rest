@@ -1,5 +1,3 @@
-version: "3.5"
-
 services:
 
   app:
@@ -7,7 +5,9 @@ services:
     ports:
       - ${PIXOO_REST_PORT:-5000}:5000
     environment:
+      - PIXOO_DEBUG=${PIXOO_DEBUG:-false}
       - PIXOO_REST_DEBUG=${PIXOO_REST_DEBUG:-false}
+      - PIXOO_DOWNLOAD_TIMEOUT=${PIXOO_DOWNLOAD_TIMEOUT:-30}
       #
       - PIXOO_HOST=${PIXOO_HOST:-pixoo}
       - PIXOO_SCREEN_SIZE=${PIXOO_SCREEN_SIZE:-64}
