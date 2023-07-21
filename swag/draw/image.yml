@@ -1,16 +1,14 @@
 parameters:
   - name: image
-    description: The image to display. (Automatically gets resized.) Can be a file or a URL.
+    description: This parameter can accept either a file or a URL (string) representing the image to be displayed. When using the UI here, the function supports file uploads. However, if calling the endpoint programmatically outside the UI, the URL can be provided as a file upload or URL string.
     in: formData
-    type: string
+    type: file
     required: true
-    default: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
     # Using 'anyOf' to allow either a file or a URL
-    # Adjust the 'type' and 'format' as per your requirements
     anyOf:
-      - type: file
       - type: string
         format: url
+      - type: file
   - $ref: "#/definitions/form_param_x"
   - $ref: "#/definitions/form_param_y"
   - name: speed
