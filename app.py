@@ -5,7 +5,7 @@ import json
 import base64
 
 from dotenv import load_dotenv
-from flask import Flask, request, redirect, abort
+from flask import Flask, request, redirect
 from flasgger import Swagger, swag_from
 from pixoo.pixoo import Channel, Pixoo
 from PIL import Image
