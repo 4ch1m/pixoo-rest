@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.0 (2023-07-23)
+
+* new "download" endpoints (automatically download and send images to your Pixoo)
+
 ## 1.3.4 (2023-06-26)
 
 * dependency updates

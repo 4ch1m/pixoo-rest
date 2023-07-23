@@ -20,7 +20,6 @@ load_dotenv()
 pixoo_host = os.environ.get('PIXOO_HOST', 'Pixoo64')
 pixoo_screen = int(os.environ.get('PIXOO_SCREEN_SIZE', 64))
 pixoo_debug = _helpers.parse_bool_value(os.environ.get('PIXOO_DEBUG', 'false'))
-pixoo_download_timeout = int(os.environ.get('PIXOO_DOWNLOAD_TIMEOUT', 30))
 
 while not _helpers.try_to_request(f'http://{pixoo_host}/get'):
     time.sleep(30)
@@ -279,7 +278,8 @@ def download_gif():
         response = requests.get(
             request.form.get('url'),
             stream=True,
-            timeout=pixoo_download_timeout
+            timeout=int(request.form.get('timeout')),
+            verify=_helpers.parse_bool_value(request.form.get('ssl_verify', default=True))
         )
 
         response.raise_for_status()
@@ -302,7 +302,8 @@ def download_image():
         response = requests.get(
             request.form.get('url'),
             stream=True,
-            timeout=pixoo_download_timeout
+            timeout=int(request.form.get('timeout')),
+            verify=_helpers.parse_bool_value(request.form.get('ssl_verify', default=True))
         )
 
         response.raise_for_status()

@@ -91,9 +91,6 @@ PIXOO_REST_HOST=0.0.0.0
 
 # OPTIONAL: the port being used; defaults to "5000" if omitted
 PIXOO_REST_PORT=5000
-
-# OPTIONAL: timeout value (seconds) when using the "download/*" endpoints; defaults to "30" if omitted
-PIXOO_DOWNLOAD_TIMEOUT=30
 ```
 
 ## Running

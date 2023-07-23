@@ -78,3 +78,29 @@ def create(swagger):
         default: true
         required: true
         """
+
+    @swagger.definition('form_param_timeout')
+    class FormParamTimeout:
+        """
+        Connection timeout in seconds.
+        ---
+        name: timeout
+        in: formData
+        type: integer
+        minimum: 3
+        maximum: 300
+        default: 30
+        required: true
+        """
+
+    @swagger.definition('form_param_ssl_verify')
+    class FormParamSslVerify:
+        """
+        Verify SSL certificates for HTTPS requests.
+        ---
+        name: ssl_verify
+        in: formData
+        type: boolean
+        default: true
+        required: false
+        """
