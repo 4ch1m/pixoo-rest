@@ -28,6 +28,7 @@ Making it easier to ...
 * :framed_picture: quickly **upload** images
 * :film_strip: **play** animations using GIFs 
 * :gear: **set** the device's channel, brightness, etc.
+* :arrow_down: automatically download and display resources from a URL
 
 ... from your own applications or home-automation tasks.
 
