@@ -231,13 +231,7 @@ def _send_gif(num, offset, width, speed, data):
     })).json()
 
 
-@app.route('/sendGif', methods=['POST'])
-@swag_from('swag/send/gif.yml')
-def send_gif():
-    gif = Image.open(request.files['gif'].stream)
-    speed = int(request.form.get('speed'))
-    skip_first_frame = _helpers.parse_bool_value(request.form.get('skip_first_frame', default=False))
-
+def _handle_gif(gif, speed, skip_first_frame):
     if gif.is_animated:
         _reset_gif()
 
@@ -259,6 +253,70 @@ def send_gif():
     else:
         pixoo.draw_image(gif)
         pixoo.push()
+
+
+@app.route('/sendGif', methods=['POST'])
+@swag_from('swag/send/gif.yml')
+def send_gif():
+    gif = Image.open(request.files['gif'].stream)
+    speed = int(request.form.get('speed'))
+    skip_first_frame = _helpers.parse_bool_value(request.form.get('skip_first_frame', default=False))
+
+    _handle_gif(
+        gif,
+        speed,
+        skip_first_frame
+    )
+
+    return 'OK'
+
+
+@app.route('/download/gif', methods=['POST'])
+@swag_from('swag/download/gif.yml')
+def download_gif():
+    try:
+        response = requests.get(
+            request.form.get('url'),
+            stream=True,
+            timeout=int(request.form.get('timeout')),
+            verify=_helpers.parse_bool_value(request.form.get('ssl_verify', default=True))
+        )
+
+        response.raise_for_status()
+
+        _handle_gif(
+            Image.open(response.raw),
+            int(request.form.get('speed')),
+            _helpers.parse_bool_value(request.form.get('skip_first_frame', default=False))
+        )
+    except (requests.exceptions.RequestException, OSError, IOError) as e:
+        return f'Error downloading the GIF: {e}', 400
+
+    return 'OK'
+
+
+@app.route('/download/image', methods=['POST'])
+@swag_from('swag/download/image.yml')
+def download_image():
+    try:
+        response = requests.get(
+            request.form.get('url'),
+            stream=True,
+            timeout=int(request.form.get('timeout')),
+            verify=_helpers.parse_bool_value(request.form.get('ssl_verify', default=True))
+        )
+
+        response.raise_for_status()
+
+        pixoo.draw_image_at_location(
+            Image.open(response.raw),
+            int(request.form.get('x')),
+            int(request.form.get('y'))
+        )
+
+        _push_immediately(request)
+    except (requests.exceptions.RequestException, OSError, IOError) as e:
+        return f'Error downloading the image: {e}', 400
 
     return 'OK'
 

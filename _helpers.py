@@ -49,6 +49,10 @@ def get_additional_swagger_template():
             {
                 'name': 'divoom',
                 'description': f'send requests to the external vendor API ({divoom_api_url})'
+            },
+            {
+                'name': 'download',
+                'description': 'automatically download and send resources to your Pixoo'
             }
         ]
     }
