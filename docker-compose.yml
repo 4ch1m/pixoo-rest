@@ -7,7 +7,6 @@ services:
     environment:
       - PIXOO_DEBUG=${PIXOO_DEBUG:-false}
       - PIXOO_REST_DEBUG=${PIXOO_REST_DEBUG:-false}
-      - PIXOO_DOWNLOAD_TIMEOUT=${PIXOO_DOWNLOAD_TIMEOUT:-30}
       #
       - PIXOO_HOST=${PIXOO_HOST:-pixoo}
       - PIXOO_SCREEN_SIZE=${PIXOO_SCREEN_SIZE:-64}
