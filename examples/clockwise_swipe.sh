@@ -10,25 +10,25 @@ function swipe() {
   for i in {-1..64}; do
     curl -s -X POST \
       -d "${START_PARAMS}&stop_x=${i}&stop_y=-1&${COLOR_PARAMS}&push_immediately=true" \
-      "http://localhost:5000/line"
+      "${PIXOO_REST_URL}/line"
   done
 
   for i in {0..64}; do
     curl -s -X POST \
       -d "${START_PARAMS}&stop_x=64&stop_y=${i}&${COLOR_PARAMS}&push_immediately=true" \
-      "http://localhost:5000/line"
+      "${PIXOO_REST_URL}/line"
   done
 
   for i in {63..-1}; do
     curl -s -X POST \
       -d "${START_PARAMS}&stop_x=${i}&stop_y=64&${COLOR_PARAMS}&push_immediately=true" \
-      "http://localhost:5000/line"
+      "${PIXOO_REST_URL}/line"
   done
 
   for i in {63..0}; do
     curl -s -X POST \
       -d "${START_PARAMS}&stop_x=-1&stop_y=${i}&${COLOR_PARAMS}&push_immediately=true" \
-      "http://localhost:5000/line"
+      "${PIXOO_REST_URL}/line"
   done
 
 }
