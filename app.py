@@ -258,14 +258,10 @@ def _handle_gif(gif, speed, skip_first_frame):
 @app.route('/sendGif', methods=['POST'])
 @swag_from('swag/send/gif.yml')
 def send_gif():
-    gif = Image.open(request.files['gif'].stream)
-    speed = int(request.form.get('speed'))
-    skip_first_frame = _helpers.parse_bool_value(request.form.get('skip_first_frame', default=False))
-
     _handle_gif(
-        gif,
-        speed,
-        skip_first_frame
+        Image.open(request.files['gif'].stream),
+        int(request.form.get('speed')),
+        _helpers.parse_bool_value(request.form.get('skip_first_frame', default=False))
     )
 
     return 'OK'
@@ -401,4 +397,3 @@ if __name__ == '__main__':
         host=os.environ.get('PIXOO_REST_HOST', '127.0.0.1'),
         port=os.environ.get('PIXOO_REST_PORT', '5000')
     )
-
