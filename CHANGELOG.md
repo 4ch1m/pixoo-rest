@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.2 (2024-02-10)
+
+* updated dependencies
+* minor improvements (Dockerfile, docker-compose, log output, etc.)
+
 ## 1.4.1 (2023-10-16)
 
 * updated dependencies

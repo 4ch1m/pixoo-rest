@@ -60,7 +60,7 @@ def get_additional_swagger_template():
 
 def try_to_request(url):
     try:
-        print(f'[ {datetime.now().strftime("%Y-%m-%d (%H:%M:%S)")} ] Trying to request "{url}" ... ', end='')
+        print(f'[{(datetime.now().strftime("%Y-%m-%d %H:%M:%S %z").strip())}] Trying to request "{url}" ... ', end='')
 
         if requests.get(url).status_code == 200:
             print('OK.')

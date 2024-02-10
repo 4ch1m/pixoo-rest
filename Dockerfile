@@ -1,15 +1,19 @@
 FROM python:3-bookworm as git_clone
 
-RUN apt-get update && apt-get install --yes --no-install-recommends git
+RUN apt-get update && \
+    apt-get install --yes --no-install-recommends git
 
 WORKDIR /pixoo
 
 RUN git clone https://github.com/SomethingWithComputers/pixoo.git . && \
-    git checkout 86e44896a5fe7cb84d34e0434daa92440bcc267a
+    git checkout f2079dfeb857f11434b7ab326fe31afae5205004
 
 FROM python:3-bookworm
 
-RUN apt-get update && apt-get install --yes --no-install-recommends curl
+ENV PYTHONUNBUFFERED=1
+
+RUN apt-get update && \
+    apt-get install --yes --no-install-recommends curl
 
 WORKDIR /usr/app
 
