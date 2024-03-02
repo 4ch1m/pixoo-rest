@@ -395,5 +395,5 @@ if __name__ == '__main__':
     app.run(
         debug=_helpers.parse_bool_value(os.environ.get('PIXOO_REST_DEBUG', 'false')),
         host=os.environ.get('PIXOO_REST_HOST', '127.0.0.1'),
-        port=os.environ.get('PIXOO_REST_PORT', '5000')
+        port=os.environ.get('PIXOO_REST_PORT', '5100')
     )

@@ -90,8 +90,8 @@ PIXOO_REST_DEBUG=true
 # OPTIONAL: the hostname to listen on; defaults to "127.0.0.1" if omitted
 PIXOO_REST_HOST=0.0.0.0
 
-# OPTIONAL: the port being used; defaults to "5000" if omitted
-PIXOO_REST_PORT=5000
+# OPTIONAL: the port being used; defaults to "5100" if omitted
+PIXOO_REST_PORT=5100
 ```
 
 ## Running
@@ -131,7 +131,7 @@ docker compose up
 
 ## Usage
 
-Open [http://localhost:5000](http://localhost:5000) in a web browser and make some requests using the [Swagger UI](https://swagger.io/):
+Open [http://localhost:5100](http://localhost:5100) in a web browser and make some requests using the [Swagger UI](https://swagger.io/):
 
 ![Screenshot](screenshot.png)
 

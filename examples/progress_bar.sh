@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PIXOO_REST_URL="http://localhost:5000"
+PIXOO_REST_URL="http://localhost:5100"
 
 SCREEN_SIZE_X=64
 SCREEN_SIZE_Y=64

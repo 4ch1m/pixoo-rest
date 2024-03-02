@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PIXOO_REST_URL="http://localhost:5000"
+PIXOO_REST_URL="http://localhost:5100"
 
 START_PARAMS="start_x=32&start_y=32"
 
