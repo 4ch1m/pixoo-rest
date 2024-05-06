@@ -13,7 +13,7 @@ parameters:
     description: Animation speed (in milliseconds).
     in: formData
     type: integer
-    minimum: '0'
+    minimum: 0
     default: 100
     required: true
   - name: skip_first_frame

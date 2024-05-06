@@ -1,4 +1,4 @@
-description: 'NOTE: The GIF should have max 60 animation frames.'
+description: 'NOTE: The GIF should have max 59 animation frames.'
 
 parameters:
   - name: gif
@@ -10,7 +10,7 @@ parameters:
     description: Animation speed (in milliseconds).
     in: formData
     type: integer
-    minimum: '0'
+    minimum: 0
     default: 100
     required: true
   - name: skip_first_frame

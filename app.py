@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 import requests
 import json
@@ -20,9 +21,16 @@ load_dotenv()
 pixoo_host = os.environ.get('PIXOO_HOST', 'Pixoo64')
 pixoo_screen = int(os.environ.get('PIXOO_SCREEN_SIZE', 64))
 pixoo_debug = _helpers.parse_bool_value(os.environ.get('PIXOO_DEBUG', 'false'))
+pixoo_test_connection_retries = int(os.environ.get('PIXOO_TEST_CONNECTION_RETRIES', sys.maxsize))
 
-while not _helpers.try_to_request(f'http://{pixoo_host}/get'):
-    time.sleep(30)
+for connection_test_count in range(pixoo_test_connection_retries + 1):
+    if _helpers.try_to_request(f'http://{pixoo_host}/get'):
+        break
+    else:
+        if connection_test_count == pixoo_test_connection_retries:
+            sys.exit(f'Failed to connect to [{pixoo_host}]. Exiting.')
+        else:
+            time.sleep(30)
 
 pixoo = Pixoo(
     pixoo_host,
@@ -203,11 +211,11 @@ def send_text():
         request.form.get('text'),
         (int(request.form.get('x')), int(request.form.get('y'))),
         (int(request.form.get('r')), int(request.form.get('g')), int(request.form.get('b'))),
-        (int(request.form.get('identifier'))),
-        (int(request.form.get('font'))),
-        (int(request.form.get('width'))),
-        (int(request.form.get('movement_speed'))),
-        (int(request.form.get('direction')))
+        int(request.form.get('identifier')),
+        int(request.form.get('font')),
+        int(request.form.get('text_width')),
+        int(request.form.get('scroll_speed')),
+        int(request.form.get('scroll_direction'))
     )
 
     return 'OK'
@@ -235,20 +243,26 @@ def _handle_gif(gif, speed, skip_first_frame):
     if gif.is_animated:
         _reset_gif()
 
-        for i in range(1 if skip_first_frame else 0, gif.n_frames):
+        gif_frames = []
+
+        for i in range((1 if skip_first_frame else 0), gif.n_frames):
+            if len(gif_frames) == 59:
+                break
+
             gif.seek(i)
 
             if gif.size not in ((16, 16), (32, 32), (64, 64)):
-                gif_frame = gif.resize((pixoo.size, pixoo.size)).convert("RGB")
+                gif_frames.append(gif.resize((pixoo.size, pixoo.size)).convert("RGB"))
             else:
-                gif_frame = gif.convert("RGB")
+                gif_frames.append(gif.convert("RGB"))
 
+        for offset, gif_frame in enumerate(gif_frames):
             _send_gif(
-                gif.n_frames + (-1 if skip_first_frame else 0),
-                i + (-1 if skip_first_frame else 0),
-                gif_frame.width,
-                speed,
-                base64.b64encode(gif_frame.tobytes()).decode("utf-8")
+                num=len(gif_frames),
+                offset=offset,
+                width=gif_frame.width,
+                speed=speed,
+                data=base64.b64encode(gif_frame.tobytes()).decode("utf-8")
             )
     else:
         pixoo.draw_image(gif)
@@ -259,9 +273,9 @@ def _handle_gif(gif, speed, skip_first_frame):
 @swag_from('swag/send/gif.yml')
 def send_gif():
     _handle_gif(
-        Image.open(request.files['gif'].stream),
-        int(request.form.get('speed')),
-        _helpers.parse_bool_value(request.form.get('skip_first_frame', default=False))
+        gif=Image.open(request.files['gif'].stream),
+        speed=int(request.form.get('speed')),
+        skip_first_frame=_helpers.parse_bool_value(request.form.get('skip_first_frame', default=False))
     )
 
     return 'OK'
@@ -272,7 +286,7 @@ def send_gif():
 def download_gif():
     try:
         response = requests.get(
-            request.form.get('url'),
+            url=request.form.get('url'),
             stream=True,
             timeout=int(request.form.get('timeout')),
             verify=_helpers.parse_bool_value(request.form.get('ssl_verify', default=True))
@@ -281,9 +295,9 @@ def download_gif():
         response.raise_for_status()
 
         _handle_gif(
-            Image.open(response.raw),
-            int(request.form.get('speed')),
-            _helpers.parse_bool_value(request.form.get('skip_first_frame', default=False))
+            gif=Image.open(response.raw),
+            speed=int(request.form.get('speed')),
+            skip_first_frame=_helpers.parse_bool_value(request.form.get('skip_first_frame', default=False))
         )
     except (requests.exceptions.RequestException, OSError, IOError) as e:
         return f'Error downloading the GIF: {e}', 400
@@ -296,7 +310,7 @@ def download_gif():
 def download_image():
     try:
         response = requests.get(
-            request.form.get('url'),
+            url=request.form.get('url'),
             stream=True,
             timeout=int(request.form.get('timeout')),
             verify=_helpers.parse_bool_value(request.form.get('ssl_verify', default=True))
@@ -315,6 +329,35 @@ def download_image():
         return f'Error downloading the image: {e}', 400
 
     return 'OK'
+
+
+@app.route('/download/text', methods=['POST'])
+@swag_from('swag/download/text.yml')
+def text_from_url():
+    return requests.post(f'http://{pixoo.address}/post', json.dumps({
+        "Command": "Draw/SendHttpItemList",
+        "ItemList": [
+            {
+                "type": 23,
+                "TextId": int(request.form.get('id')),
+                "TextString": request.form.get('url'),
+                "x": int(request.form.get('x')),
+                "y": int(request.form.get('y')),
+                "dir": int(request.form.get('scroll_direction')),
+                "font": 4,
+                "TextWidth": int(request.form.get('text_width')),
+                "Textheight": int(request.form.get('text_height')),
+                "speed": int(request.form.get('scroll_speed')),
+                "update_time": int(request.form.get('update_interval')),
+                "align": int(request.form.get('horizontal_alignment')),
+                "color": '#{:02x}{:02x}{:02x}'.format(
+                    int(request.form.get('r')),
+                    int(request.form.get('g')),
+                    int(request.form.get('b'))
+                )
+            }
+        ]
+    })).json()
 
 
 passthrough_routes = {
@@ -351,6 +394,7 @@ passthrough_routes = {
     '/passthrough/draw/clearHttpText': passthrough.create(*passthrough.draw_clear_http_text),
     '/passthrough/draw/sendHttpGif': passthrough.create(*passthrough.draw_send_http_gif),
     '/passthrough/draw/resetHttpGifId': passthrough.create(*passthrough.draw_reset_http_gif_id),
+    '/passthrough/draw/sendHttpItemList': passthrough.create(*passthrough.draw_send_http_item_list)
 }
 
 

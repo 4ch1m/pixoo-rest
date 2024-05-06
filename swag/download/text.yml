@@ -1,0 +1,59 @@
+description: >
+    Periodically queries text from an URL and draws it on screen. The text will scroll if too large.<br>
+    <br>
+    The query-response must contain a JSON-payload with this structure:
+    <pre>{ "ReturnCode": 0, "ReturnMessage": "", "DispData": "Hello World!" }</pre>
+    The device's built-in method [draw/sendHttpItemList](#/pass-through/post_passthrough_draw_sendHttpItemList) is used for this feature. 
+
+parameters:
+  - name: id
+    description: Unique id of this text element.
+    in: formData
+    type: integer
+    minimum: 1
+    maximum: 39
+    default: 1
+    required: true
+  - name: url
+    description: The URL from which the text should be queried from.
+    in: formData
+    type: string
+    pattern: '^(https:|http:|www\.)\S*'
+    default: 'https://raw.githubusercontent.com/4ch1m/pixoo-rest/master/examples/text_download.json'
+    required: true
+  - $ref: '#/definitions/form_param_x'
+  - $ref: '#/definitions/form_param_y'
+  - $ref: '#/definitions/form_param_scroll_direction'
+  - $ref: '#/definitions/form_param_scroll_speed'
+  - $ref: '#/definitions/form_param_text_width'
+  - $ref: '#/definitions/form_param_text_height'
+  - $ref: '#/definitions/form_param_r'
+  - $ref: '#/definitions/form_param_g'
+  - $ref: '#/definitions/form_param_b'
+  - name: update_interval
+    description: Update interval in seconds.
+    in: formData
+    type: integer
+    minimum: 1
+    default: 60
+    required: false
+  - name: horizontal_alignment
+    description: >
+      Horizontal alignment.
+        * 1 = left
+        * 2 = middle
+        * 3 = right
+    in: formData
+    type: integer
+    enum:
+      - 1
+      - 2
+      - 3
+    required: true
+
+responses:
+  '200':
+    description: OK
+
+tags:
+  - download

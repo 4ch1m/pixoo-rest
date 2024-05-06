@@ -1,0 +1,12 @@
+.idea/
+*.iml
+.git/
+.gitignore
+.gitmodules
+examples/
+helm/
+venv/
+.env
+/*.md
+/*.png
+LICENSE

@@ -3,29 +3,29 @@ parameters:
     description: Horizontal pixel position of the top left corner.
     in: formData
     type: integer
-    minimum: '0'
-    default: '0'
+    minimum: 0
+    default: 0
     required: true
   - name: top_left_y
     description: Vertical pixel position of the top left corner.
     in: formData
     type: integer
-    minimum: '0'
-    default: '0'
+    minimum: 0
+    default: 0
     required: true
   - name: bottom_right_x
     description: Horizontal pixel position of the bottom right corner.
     in: formData
     type: integer
-    minimum: '0'
-    default: '0'
+    minimum: 0
+    default: 0
     required: true
   - name: bottom_right_y
     description: Vertical pixel position of the bottom right corner.
     in: formData
     type: integer
-    minimum: '0'
-    default: '0'
+    minimum: 0
+    default: 0
     required: true
   - $ref: '#/definitions/form_param_r'
   - $ref: '#/definitions/form_param_g'

@@ -1,6 +1,7 @@
 services:
 
   app:
+    #image: 4ch1m/pixoo-rest:latest
     build: .
     ports:
       - ${PIXOO_REST_PORT:-5000}:5000

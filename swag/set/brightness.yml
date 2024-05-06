@@ -5,7 +5,7 @@ parameters:
     type: integer
     required: true
     default: 85
-    minimum: '0'
+    minimum: 0
     maximum: 100
 
 responses:

@@ -4,8 +4,8 @@ parameters:
     in: path
     type: integer
     required: true
-    default: '0'
-    minimum: '0'
+    default: 0
+    minimum: 0
 
 responses:
   '200':

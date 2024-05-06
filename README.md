@@ -92,6 +92,9 @@ PIXOO_REST_HOST=0.0.0.0
 
 # OPTIONAL: the port being used; defaults to "5000" if omitted
 PIXOO_REST_PORT=5000
+
+# OPTIONAL: the amount of retries that should be performed to connect to the Pixoo-device when starting the app; defaults to "infinity" when omitted
+PIXOO_TEST_CONNECTION_RETRIES=10
 ```
 
 ## Running
@@ -129,6 +132,20 @@ docker compose up
 ```
 ... to automatically build the container and run it.
 
+#### NEW :star:
+
+If you don't want to build the container image yourself, you now can use the pre-built image from [hub.docker.com](https://hub.docker.com/r/4ch1m/pixoo-rest).
+
+Simply uncomment the `image`-attribute in [docker-compose.yml](docker-compose.yml), and comment out the `build`-attribute:
+
+```yaml
+  app:
+    image: 4ch1m/pixoo-rest:latest
+    #build: .
+```
+
+There's also a [Helm chart](helm) you can use for deployments to [K8s](https://kubernetes.io/).
+
 ## Usage
 
 Open [http://localhost:5000](http://localhost:5000) in a web browser and make some requests using the [Swagger UI](https://swagger.io/):
@@ -141,6 +158,10 @@ For every executed request you'll get a handy [curl](https://curl.se/) command-l
 ### Examples
 
 A few example (shell-)scripts can be found here: [:toolbox:](examples)
+
+## Credits
+
+Example animation file ([duck.gif](swag/duck.gif)) by `kotnaszynce` / [OpenGameArt](https://opengameart.org/content/cute-duck-animated-set).
 
 ## License
 

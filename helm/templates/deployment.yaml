@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    app: {{ .Values.label }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.label }}
+  template:
+    metadata:
+      name: {{ .Chart.Name }}
+      labels:
+        app: {{ .Values.label }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 5000
+          livenessProbe:
+            httpGet:
+              port: 5000
+            initialDelaySeconds: {{ .Values.livenessProbe.delay }}
+            periodSeconds: {{ .Values.livenessProbe.period }}
+          env:
+            - name: TZ
+              value: "{{ .Values.environment.timezone }}"
+            - name: PIXOO_HOST
+              value: "{{ .Values.environment.pixoo_host }}"
+            - name: PIXOO_DEBUG
+              value: "{{ .Values.environment.pixoo_debug }}"
+            - name: PIXOO_SCREEN_SIZE
+              value: "{{ .Values.environment.pixoo_size }}"
+            - name: PIXOO_REST_DEBUG
+              value: "{{ .Values.environment.pixoo_rest_debug }}"
+            - name: PIXOO_TEST_CONNECTION_RETRIES
+              value: "{{ .Values.environment.pixoo_test_connection_retries }}"
+      restartPolicy: {{ .Values.restartPolicy }}

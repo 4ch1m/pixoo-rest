@@ -1,4 +1,5 @@
-from pathlib import Path
+from base64 import b64encode
+from PIL import Image
 
 
 def create(example, description):
@@ -171,8 +172,8 @@ draw_send_http_gif = f"""{{
   "PicOffset": 0,
   "PicID": 1000,
   "PicSpeed": 100,
-  "PicData": "{ Path('swag/pic_data.base64').read_text() }"
-}}""", "Send animation to device. (NOTE: Multiple JSON objects can be sent at once here; 'PicOffset' should be incremented then; 'PicNum' should match the total number of GIFs.)"
+  "PicData": "{ b64encode(Image.open('swag/duck.gif').convert("RGB").tobytes()).decode("utf-8") }"
+}}""", "Send animation to device. (NOTE: Multiple requests/objects need to be sent in sequence in order to create an animation; 'PicOffset' must be incremented (starting with 0); 'PicNum' must match the total number of GIFs.)"
 
 draw_clear_http_text = """{
   "Command": "Draw/ClearHttpText"
@@ -181,3 +182,64 @@ draw_clear_http_text = """{
 draw_reset_http_gif_id = """{
   "Command": "Draw/ResetHttpGifId"
 }""", "Reset GIF id."
+
+draw_send_http_item_list = """{
+  "Command": "Draw/SendHttpItemList",
+  "ItemList": [
+    {
+       "TextId": 5,
+       "type": 6,
+       "x": 32,
+       "y": 32,
+       "dir": 0,
+       "font": 18,
+       "TextWidth": 32,
+       "Textheight": 16,
+       "speed": 100,
+       "align": 1,
+       "color": "#FF0000"
+    },
+    {
+       "TextId": 1,
+       "type": 14,
+       "x": 0,
+       "y": 0,
+       "dir": 0,
+       "font": 18,
+       "TextWidth": 32,
+       "Textheight": 16,
+       "speed": 100,
+       "align": 1,
+       "color": "#FF0000"
+    },
+    {
+       "TextId": 2,
+       "type": 22,
+       "x": 16,
+       "y": 16,
+       "dir": 0,
+       "font": 2,
+       "TextWidth": 48,
+       "Textheight": 16,
+       "speed": 100,
+       "align": 1,
+       "TextString": "hello, divoom",
+       "color": "#FFFFFF"
+    },
+    {
+       "TextId": 20,
+       "type": 23,
+       "x": 0,
+       "y": 48,
+       "dir": 0,
+       "font": 4,
+       "TextWidth": 64,
+       "Textheight": 16,
+       "speed": 100,
+       "update_time": 60,
+       "align": 1,
+       "TextString": "http://appin.divoom-gz.com/Device/ReturnCurrentDate?test=0",
+       "color": "#FFF000"
+    }
+  ]
+}""", "Draws (multiple) basic text elements at once. The elements include (scrolling) date, time and temperature strings."

@@ -1,6 +1,7 @@
-.idea
+.idea/
 *.iml
-venv
-.venv
-pixoo
+venv/
+.venv/
 .env
+pixoo/
+/*.sh

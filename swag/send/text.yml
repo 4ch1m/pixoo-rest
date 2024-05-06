@@ -18,9 +18,9 @@ parameters:
     description: The text identifier.
     in: formData
     type: integer
-    minimum: '0'
+    minimum: 0
     maximum: 19
-    default: '0'
+    default: 0
   - name: font
     description: The font number.
     in: formData
@@ -34,26 +34,9 @@ parameters:
       - 6
       - 7
     default: 1
-  - name: width
-    description: The text width.
-    in: formData
-    type: integer
-    minimum: 16
-    maximum: 64
-    default: 64
-  - name: movement_speed
-    description: The movement speed.
-    in: formData
-    type: integer
-    default: '0'
-  - name: direction
-    description: The scroll direction.
-    in: formData
-    type: integer
-    enum:
-      - 0 # left
-      - 1 # right
-    default: '0'
+  - $ref: '#/definitions/form_param_text_width'
+  - $ref: '#/definitions/form_param_scroll_speed'
+  - $ref: '#/definitions/form_param_scroll_direction'
 
 responses:
   '200':

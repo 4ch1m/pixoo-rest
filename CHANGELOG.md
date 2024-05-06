@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.5.0 (2024-05-06)
+
+* new: (passthrough-)endpoint `sendHttpItemList`, which is available with the latest firmware update and offers drawing of multiple text-elements at once
+* new: custom `download/text` endpoint
+* new: Helm charts / K8s
+* improved handling for GIF file upload (automatically limit to 59 frames; following the restriction of the device/API)
+* updated dependencies
+* other minor improvements
+
 ## 1.4.2 (2024-02-10)
 
 * updated dependencies
