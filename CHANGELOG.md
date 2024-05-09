@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.1 (2024-05-09)
+
+* improved configuration options when running behind a reverse proxy:  
+  the `SCRIPT_NAME` environment variable (see [WSGI docs](https://wsgi.readthedocs.io/en/latest/definitions.html#envvar-SCRIPT_NAME)) is now taken into consideration; making it possible to set a custom base-path
+
 ## 1.5.0 (2024-05-06)
 
 * new: (passthrough-)endpoint `sendHttpItemList`, which is available with the latest firmware update and offers drawing of multiple text-elements at once

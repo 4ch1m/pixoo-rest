@@ -1,11 +1,12 @@
+import os
 import requests
 import json
 
 from datetime import datetime
 from pathlib import Path
 
+script_name = os.environ.get('SCRIPT_NAME', '') # NOTE: WSGI-conform base-path/url-prefix
 divoom_api_url = 'https://app.divoom-gz.com'
-
 
 def parse_bool_value(value):
     if isinstance(value, bool):
@@ -23,7 +24,9 @@ def get_swagger_config():
         'description': 'A RESTful API to easily interact with the Wi-Fi enabled {} devices.'.format(
             '<a href="https://www.divoom.com/de/products/pixoo-64">Divoom Pixoo</a>'
         ),
-        'termsOfService': ''
+        'termsOfService': '',
+        'basePath': script_name,
+        'url_prefix': script_name
     }
 
 

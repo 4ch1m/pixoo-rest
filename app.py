@@ -6,7 +6,7 @@ import json
 import base64
 
 from dotenv import load_dotenv
-from flask import Flask, request, redirect
+from flask import Flask, request, redirect, url_for
 from flasgger import Swagger, swag_from
 from pixoo.pixoo import Channel, Pixoo
 from PIL import Image
@@ -52,7 +52,12 @@ def _push_immediately(_request):
 
 @app.route('/', methods=['GET'])
 def home():
-    return redirect('/apidocs')
+    return redirect(url_for('flasgger.apidocs'))
+
+
+@app.route('/health', methods=['GET'])
+def health():
+    return 'OK'
 
 
 @app.route('/brightness/<int:percentage>', methods=['PUT'])

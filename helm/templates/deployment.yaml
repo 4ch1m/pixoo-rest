@@ -23,12 +23,15 @@ spec:
             - containerPort: 5000
           livenessProbe:
             httpGet:
+              path: {{ .Values.ingress.path }}/health
               port: 5000
             initialDelaySeconds: {{ .Values.livenessProbe.delay }}
             periodSeconds: {{ .Values.livenessProbe.period }}
           env:
             - name: TZ
               value: "{{ .Values.environment.timezone }}"
+            - name: SCRIPT_NAME
+              value: "{{ .Values.ingress.path }}"
             - name: PIXOO_HOST
               value: "{{ .Values.environment.pixoo_host }}"
             - name: PIXOO_DEBUG

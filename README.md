@@ -95,6 +95,9 @@ PIXOO_REST_PORT=5000
 
 # OPTIONAL: the amount of retries that should be performed to connect to the Pixoo-device when starting the app; defaults to "infinity" when omitted
 PIXOO_TEST_CONNECTION_RETRIES=10
+
+# OPTIONAL: WSGI-conform way to configure a base-path/prefix-url (which may be neede when running behind a reverse proxy); NOTE -> this string must start with a slash!
+SCRIPT_NAME=/pixoo-rest
 ```
 
 ## Running
