@@ -97,6 +97,7 @@ PIXOO_REST_PORT=5000
 PIXOO_TEST_CONNECTION_RETRIES=10
 
 # OPTIONAL: WSGI-conform way to configure a base-path/prefix-url (which may be needed when running behind a reverse proxy); NOTE -> this string must start with a slash!
+# (CAUTION! Only set this if you really need it.)
 SCRIPT_NAME=/pixoo-rest
 ```
 
