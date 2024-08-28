@@ -2,6 +2,25 @@
 
 > A RESTful API to easily interact with the Wi-Fi enabled [Divoom Pixoo](https://www.divoom.com/de/products/pixoo-64) devices.
 
+---
+
+:information_source: **INFORMATION**  
+
+This project was created back in February 2022; aiming to provide a REST-like interface for the [pixoo library](https://github.com/SomethingWithComputers/pixoo).  
+With an [update from August 2024](https://github.com/SomethingWithComputers/pixoo/commit/9984e4dfea1cf60ae0ec2cd05a6d39fb40bd8644), the library's creator decided to implement/integrate a dedicated REST-interface himself.
+
+However, `pixoo-rest` still offers unique features like ...
+
+* built-in Swagger UI
+* "pass through" endpoints (with example payloads and detailed descriptions)
+* (pre-built) container image
+* Helm chart
+* etc.
+
+So... I'll keep maintaining the project as long as there's enough interest.
+
+---
+
 ## Table of Contents
 
 * [Introduction](#introduction)
@@ -62,13 +81,6 @@ git clone https://github.com/4ch1m/pixoo-rest.git
 ... and change directory:
 ```bash
 cd pixoo-rest
-```
-
-### Init
-
-Update/initialize the _pixoo_ submodule:
-```bash
-git submodule update --init
 ```
 
 ### Configure

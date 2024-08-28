@@ -2,10 +2,10 @@
 *.iml
 .git/
 .gitignore
-.gitmodules
 examples/
 helm/
 venv/
+.venv/
 .env
 /*.md
 /*.png

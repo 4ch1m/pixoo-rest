@@ -1,13 +1,3 @@
-FROM python:3-bookworm as git_clone
-
-RUN apt-get update && \
-    apt-get install --yes --no-install-recommends git
-
-WORKDIR /pixoo
-
-RUN git clone https://github.com/SomethingWithComputers/pixoo.git . && \
-    git checkout f2079dfeb857f11434b7ab326fe31afae5205004
-
 FROM python:3-bookworm
 
 ENV PYTHONUNBUFFERED=1
@@ -16,8 +6,6 @@ RUN apt-get update && \
     apt-get install --yes --no-install-recommends curl
 
 WORKDIR /usr/app
-
-COPY --from=git_clone /pixoo pixoo
 
 COPY requirements.txt .
 

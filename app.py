@@ -8,7 +8,7 @@ import base64
 from dotenv import load_dotenv
 from flask import Flask, request, redirect, url_for
 from flasgger import Swagger, swag_from
-from pixoo.pixoo import Channel, Pixoo
+from pixoo import Channel, Pixoo
 from PIL import Image
 
 from swag import definitions
@@ -227,13 +227,13 @@ def send_text():
 
 
 def _reset_gif():
-    return requests.post(f'http://{pixoo.address}/post', json.dumps({
+    return requests.post(f'http://{pixoo.ip_address}/post', json.dumps({
         "Command": "Draw/ResetHttpGifId"
     })).json()
 
 
 def _send_gif(num, offset, width, speed, data):
-    return requests.post(f'http://{pixoo.address}/post', json.dumps({
+    return requests.post(f'http://{pixoo.ip_address}/post', json.dumps({
         "Command": "Draw/SendHttpGif",
         "PicID": 1,
         "PicNum": num,
@@ -339,7 +339,7 @@ def download_image():
 @app.route('/download/text', methods=['POST'])
 @swag_from('swag/download/text.yml')
 def text_from_url():
-    return requests.post(f'http://{pixoo.address}/post', json.dumps({
+    return requests.post(f'http://{pixoo.ip_address}/post', json.dumps({
         "Command": "Draw/SendHttpItemList",
         "ItemList": [
             {
@@ -404,7 +404,7 @@ passthrough_routes = {
 
 
 def _passthrough_request(passthrough_request):
-    return requests.post(f'http://{pixoo.address}/post', json.dumps(passthrough_request.json)).json()
+    return requests.post(f'http://{pixoo.ip_address}/post', json.dumps(passthrough_request.json)).json()
 
 
 for _route, _swag in passthrough_routes.items():

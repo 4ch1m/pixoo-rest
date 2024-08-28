@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.0  (2024-08-28)
+
+* removed `pixoo` as git-submodule; now added via PyPi package
+* other dependencies updated
+
 ## 1.5.1 (2024-05-09)
 
 * improved configuration options when running behind a reverse proxy:  
