@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.1  (2025-12-18)
+
+* dependency updates
+
 ## 1.6.0  (2024-08-28)
 
 * removed `pixoo` as git-submodule; now added via PyPi package
