@@ -92,7 +92,7 @@ git submodule update --init
 
 ### Configure
 
-Create an `.env`-file alongside the [app.py](app.py)-file / [docker-compose.yml](docker-compose.yml)-file and put your individual settings in it; like so:
+Create an `.env`-file (in the project's root) and put your individual settings in it; like so:
 ```properties
 # MANDATORY: the hostname of your Pixoo device; defaults to "Pixoo64" if omitted
 PIXOO_HOST=192.168.178.11
