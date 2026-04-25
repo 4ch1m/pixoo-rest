@@ -83,6 +83,13 @@ git clone https://github.com/4ch1m/pixoo-rest.git
 cd pixoo-rest
 ```
 
+### Init
+
+Update/initialize the _pixoo_ submodule:
+```bash
+git submodule update --init
+```
+
 ### Configure
 
 Create an `.env`-file alongside the [app.py](app.py)-file / [docker-compose.yml](docker-compose.yml)-file and put your individual settings in it; like so:
@@ -126,8 +133,8 @@ or
 
 Create a virtual environment and activate it (optional; but recommended):
 ```bash
-python3 -m venv venv
-. venv/bin/activate
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
 Install all dependencies:
@@ -177,7 +184,7 @@ A few example (shell-)scripts can be found here: [:toolbox:](examples)
 
 ## Credits
 
-Example animation file ([duck.gif](swag/duck.gif)) by `kotnaszynce` / [OpenGameArt](https://opengameart.org/content/cute-duck-animated-set).
+Example animation file ([duck.gif](pixoo_rest/swag/duck.gif)) by `kotnaszynce` / [OpenGameArt](https://opengameart.org/content/cute-duck-animated-set).
 
 ## License
 

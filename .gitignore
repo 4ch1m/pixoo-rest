@@ -1,6 +1,6 @@
 .idea/
 *.iml
-venv/
 .venv/
 .env
 /*.sh
+pixoo_rest/pixoo/

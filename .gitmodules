@@ -1,0 +1,3 @@
+[submodule "pixoo"]
+	path = pixoo_rest/pixoo
+	url = https://github.com/SomethingWithComputers/pixoo

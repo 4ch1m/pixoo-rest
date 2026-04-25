@@ -8,23 +8,22 @@ import base64
 from dotenv import load_dotenv
 from flask import Flask, request, redirect, url_for
 from flasgger import Swagger, swag_from
-from pixoo import Channel, Pixoo
 from PIL import Image
 
-from swag import definitions
-from swag import passthrough
+from . import helpers
+from .swag import definitions, passthrough
+from .pixoo.src.pixoo import Pixoo
 
-import _helpers
 
 load_dotenv()
 
 pixoo_host = os.environ.get('PIXOO_HOST', 'Pixoo64')
 pixoo_screen = int(os.environ.get('PIXOO_SCREEN_SIZE', 64))
-pixoo_debug = _helpers.parse_bool_value(os.environ.get('PIXOO_DEBUG', 'false'))
+pixoo_debug = helpers.parse_bool_value(os.environ.get('PIXOO_DEBUG', 'false'))
 pixoo_test_connection_retries = int(os.environ.get('PIXOO_TEST_CONNECTION_RETRIES', sys.maxsize))
 
 for connection_test_count in range(pixoo_test_connection_retries + 1):
-    if _helpers.try_to_request(f'http://{pixoo_host}/get'):
+    if helpers.try_to_request(f'http://{pixoo_host}/get'):
         break
     else:
         if connection_test_count == pixoo_test_connection_retries:
@@ -39,14 +38,14 @@ pixoo = Pixoo(
 )
 
 app = Flask(__name__)
-app.config['SWAGGER'] = _helpers.get_swagger_config()
+app.config['SWAGGER'] = helpers.get_swagger_config()
 
-swagger = Swagger(app, template=_helpers.get_additional_swagger_template())
+swagger = Swagger(app, template=helpers.get_additional_swagger_template())
 definitions.create(swagger)
 
 
 def _push_immediately(_request):
-    if _helpers.parse_bool_value(_request.form.get('push_immediately', default=True)):
+    if helpers.parse_bool_value(_request.form.get('push_immediately', default=True)):
         pixoo.push()
 
 
@@ -75,7 +74,7 @@ def brightness(percentage):
 @swag_from('swag/set/generic_number.yml')
 def generic_set_number(number):
     if request.path.startswith('/channel/'):
-        pixoo.set_channel(Channel(number))
+        pixoo.set_channel(number)
     elif request.path.startswith('/face/'):
         pixoo.set_face(number)
     elif request.path.startswith('/visualizer/'):
@@ -90,7 +89,7 @@ def generic_set_number(number):
 @swag_from('swag/set/generic_boolean.yml')
 def generic_set_boolean(boolean):
     if request.path.startswith('/screen/on/'):
-        pixoo.set_screen(_helpers.parse_bool_value(boolean))
+        pixoo.set_screen(helpers.parse_bool_value(boolean))
 
     return 'OK'
 
@@ -228,19 +227,19 @@ def send_text():
 
 def _reset_gif():
     return requests.post(f'http://{pixoo.ip_address}/post', json.dumps({
-        "Command": "Draw/ResetHttpGifId"
+        'Command': 'Draw/ResetHttpGifId'
     })).json()
 
 
 def _send_gif(num, offset, width, speed, data):
     return requests.post(f'http://{pixoo.ip_address}/post', json.dumps({
-        "Command": "Draw/SendHttpGif",
-        "PicID": 1,
-        "PicNum": num,
-        "PicOffset": offset,
-        "PicWidth": width,
-        "PicSpeed": speed,
-        "PicData": data
+        'Command': 'Draw/SendHttpGif',
+        'PicID': 1,
+        'PicNum': num,
+        'PicOffset': offset,
+        'PicWidth': width,
+        'PicSpeed': speed,
+        'PicData': data
     })).json()
 
 
@@ -257,9 +256,9 @@ def _handle_gif(gif, speed, skip_first_frame):
             gif.seek(i)
 
             if gif.size not in ((16, 16), (32, 32), (64, 64)):
-                gif_frames.append(gif.resize((pixoo.size, pixoo.size)).convert("RGB"))
+                gif_frames.append(gif.resize((pixoo.size, pixoo.size)).convert('RGB'))
             else:
-                gif_frames.append(gif.convert("RGB"))
+                gif_frames.append(gif.convert('RGB'))
 
         for offset, gif_frame in enumerate(gif_frames):
             _send_gif(
@@ -267,7 +266,7 @@ def _handle_gif(gif, speed, skip_first_frame):
                 offset=offset,
                 width=gif_frame.width,
                 speed=speed,
-                data=base64.b64encode(gif_frame.tobytes()).decode("utf-8")
+                data=base64.b64encode(gif_frame.tobytes()).decode('utf-8')
             )
     else:
         pixoo.draw_image(gif)
@@ -280,7 +279,7 @@ def send_gif():
     _handle_gif(
         gif=Image.open(request.files['gif'].stream),
         speed=int(request.form.get('speed')),
-        skip_first_frame=_helpers.parse_bool_value(request.form.get('skip_first_frame', default=False))
+        skip_first_frame=helpers.parse_bool_value(request.form.get('skip_first_frame', default=False))
     )
 
     return 'OK'
@@ -294,7 +293,7 @@ def download_gif():
             url=request.form.get('url'),
             stream=True,
             timeout=int(request.form.get('timeout')),
-            verify=_helpers.parse_bool_value(request.form.get('ssl_verify', default=True))
+            verify=helpers.parse_bool_value(request.form.get('ssl_verify', default=True))
         )
 
         response.raise_for_status()
@@ -302,7 +301,7 @@ def download_gif():
         _handle_gif(
             gif=Image.open(response.raw),
             speed=int(request.form.get('speed')),
-            skip_first_frame=_helpers.parse_bool_value(request.form.get('skip_first_frame', default=False))
+            skip_first_frame=helpers.parse_bool_value(request.form.get('skip_first_frame', default=False))
         )
     except (requests.exceptions.RequestException, OSError, IOError) as e:
         return f'Error downloading the GIF: {e}', 400
@@ -318,7 +317,7 @@ def download_image():
             url=request.form.get('url'),
             stream=True,
             timeout=int(request.form.get('timeout')),
-            verify=_helpers.parse_bool_value(request.form.get('ssl_verify', default=True))
+            verify=helpers.parse_bool_value(request.form.get('ssl_verify', default=True))
         )
 
         response.raise_for_status()
@@ -340,22 +339,22 @@ def download_image():
 @swag_from('swag/download/text.yml')
 def text_from_url():
     return requests.post(f'http://{pixoo.ip_address}/post', json.dumps({
-        "Command": "Draw/SendHttpItemList",
-        "ItemList": [
+        'Command': 'Draw/SendHttpItemList',
+        'ItemList': [
             {
-                "type": 23,
-                "TextId": int(request.form.get('id')),
-                "TextString": request.form.get('url'),
-                "x": int(request.form.get('x')),
-                "y": int(request.form.get('y')),
-                "dir": int(request.form.get('scroll_direction')),
-                "font": 4,
-                "TextWidth": int(request.form.get('text_width')),
-                "Textheight": int(request.form.get('text_height')),
-                "speed": int(request.form.get('scroll_speed')),
-                "update_time": int(request.form.get('update_interval')),
-                "align": int(request.form.get('horizontal_alignment')),
-                "color": '#{:02x}{:02x}{:02x}'.format(
+                'type': 23,
+                'TextId': int(request.form.get('id')),
+                'TextString': request.form.get('url'),
+                'x': int(request.form.get('x')),
+                'y': int(request.form.get('y')),
+                'dir': int(request.form.get('scroll_direction')),
+                'font': 4,
+                'TextWidth': int(request.form.get('text_width')),
+                'Textheight': int(request.form.get('text_height')),
+                'speed': int(request.form.get('scroll_speed')),
+                'update_time': int(request.form.get('update_interval')),
+                'align': int(request.form.get('horizontal_alignment')),
+                'color': '#{:02x}{:02x}{:02x}'.format(
                     int(request.form.get('r')),
                     int(request.form.get('g')),
                     int(request.form.get('b'))
@@ -419,30 +418,30 @@ def passthrough_{list(passthrough_routes.keys()).index(_route)}():
 @app.route('/divoom/device/lan', methods=['POST'])
 @swag_from('swag/divoom/device/return_same_lan_device.yml')
 def divoom_return_same_lan_device():
-    return _helpers.divoom_api_call('Device/ReturnSameLANDevice').json()
+    return helpers.divoom_api_call('Device/ReturnSameLANDevice').json()
 
 
 @app.route('/divoom/channel/dial/types', methods=['POST'])
 @swag_from('swag/divoom/channel/get_dial_type.yml')
 def divoom_get_dial_type():
-    return _helpers.divoom_api_call('Channel/GetDialType').json()
+    return helpers.divoom_api_call('Channel/GetDialType').json()
 
 
 @app.route('/divoom/channel/dial/list', methods=['POST'])
 @swag_from('swag/divoom/channel/get_dial_list.yml')
 def divoom_get_dial_list():
-    return _helpers.divoom_api_call(
+    return helpers.divoom_api_call(
         'Channel/GetDialList',
         {
             'DialType': request.form.get('dial_type', default='Game'),
-            'Page': int(request.form.get('page_number', default='1'))
+            'Page': int(request.form.get('page_number', default=1))
         }
     ).json()
 
 
 if __name__ == '__main__':
     app.run(
-        debug=_helpers.parse_bool_value(os.environ.get('PIXOO_REST_DEBUG', 'false')),
+        debug=helpers.parse_bool_value(os.environ.get('PIXOO_REST_DEBUG', 'false')),
         host=os.environ.get('PIXOO_REST_HOST', '127.0.0.1'),
-        port=os.environ.get('PIXOO_REST_PORT', '5000')
+        port=int(os.environ.get('PIXOO_REST_PORT', 5000))
     )

@@ -1,5 +1,6 @@
 from base64 import b64encode
 from PIL import Image
+from pathlib import Path
 
 
 def create(example, description):
@@ -172,7 +173,7 @@ draw_send_http_gif = f"""{{
   "PicOffset": 0,
   "PicID": 1000,
   "PicSpeed": 100,
-  "PicData": "{ b64encode(Image.open('swag/duck.gif').convert("RGB").tobytes()).decode("utf-8") }"
+  "PicData": "{ b64encode(Image.open(Path(__file__).parent.resolve() / 'duck.gif').convert("RGB").tobytes()).decode("utf-8") }"
 }}""", "Send animation to device. (NOTE: Multiple requests/objects need to be sent in sequence in order to create an animation; 'PicOffset' must be incremented (starting with 0); 'PicNum' must match the total number of GIFs.)"
 
 draw_clear_http_text = """{

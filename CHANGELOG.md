@@ -1,10 +1,18 @@
 # Changelog
 
-## 1.6.1  (2025-12-18)
+## 1.6.2 (2026-04-25)
+
+* restructured code
+* minor code improvements
+* removal of `pixoo` PyPi-package usage; rollback to integration via git-submodule (see version `1.6.0`);  
+the dependencies to `Flask`, `requests`, `pillow` and `python-dotenv` can now be controlled/updated independently again
+* overall updated dependencies
+
+## 1.6.1 (2025-12-18)
 
 * dependency updates
 
-## 1.6.0  (2024-08-28)
+## 1.6.0 (2024-08-28)
 
 * removed `pixoo` as git-submodule; now added via PyPi package
 * other dependencies updated

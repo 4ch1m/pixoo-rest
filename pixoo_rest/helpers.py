@@ -5,8 +5,10 @@ import json
 from datetime import datetime
 from pathlib import Path
 
+
 script_name = os.environ.get('SCRIPT_NAME', '') # NOTE: WSGI-conform base-path/url-prefix
 divoom_api_url = 'https://app.divoom-gz.com'
+
 
 def parse_bool_value(value):
     if isinstance(value, bool):

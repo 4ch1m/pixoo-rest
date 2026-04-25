@@ -4,9 +4,11 @@
 .gitignore
 examples/
 helm/
-venv/
 .venv/
 .env
 /*.md
 /*.png
+/*.sh
+/*.yml
 LICENSE
+pixoo_rest/pixoo/
