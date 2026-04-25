@@ -144,7 +144,7 @@ pip install -r requirements.txt
 
 Finally, run the app:
 ```bash
-python app.py
+python -m pixoo_rest.main
 ```
 
 ### Containerized
