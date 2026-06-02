@@ -1,0 +1,4 @@
+{
+  "Command": "Device/SetTime24Flag",
+  "Mode": 0
+}

@@ -1,82 +1,75 @@
-import os
-import requests
 import json
+import base64
+import logging
 
-from datetime import datetime
-from pathlib import Path
+from functools import lru_cache
 
+import requests
 
-script_name = os.environ.get('SCRIPT_NAME', '') # NOTE: WSGI-conform base-path/url-prefix
-divoom_api_url = 'https://app.divoom-gz.com'
+from PIL import ImageFile
 
-
-def parse_bool_value(value):
-    if isinstance(value, bool):
-        return value
-    if isinstance(value, str):
-        return value.strip().lower() in {'true', 'yes', '1'}
-    else:
-        raise ValueError(f'expected bool or string; got {type(value)}')
+from .settings import Settings
+from .pixoo.src.pixoo.objects.pixoo import Pixoo
 
 
-def get_swagger_config():
-    return {
-        'title': 'Pixoo REST',
-        'version': Path('version.txt').read_text(),
-        'description': 'A RESTful API to easily interact with the Wi-Fi enabled {} devices.'.format(
-            '<a href="https://www.divoom.com/de/products/pixoo-64">Divoom Pixoo</a>'
-        ),
-        'termsOfService': '',
-        'basePath': script_name,
-        'url_prefix': script_name
-    }
+logger = logging.getLogger(__name__)
 
 
-def get_additional_swagger_template():
-    return {
-        'tags': [
-            {
-                'name': 'draw',
-                'description': 'draw lines, pixels, rectangles, etc. on your Pixoo'
-            },
-            {
-                'name': 'send',
-                'description': 'send text, GIFs, etc. to your Pixoo'
-            },
-            {
-                'name': 'set',
-                'description': 'set brightness, channel, clock, etc. on your Pixoo'
-            },
-            {
-                'name': 'pass-through',
-                'description': "directly pass commands to your Pixoo's built-in HTTP-API"
-            },
-            {
-                'name': 'divoom',
-                'description': f'send requests to the external vendor API ({divoom_api_url})'
-            },
-            {
-                'name': 'download',
-                'description': 'automatically download and send resources to your Pixoo'
-            }
-        ]
-    }
+@lru_cache()
+def get_pixoo() -> Pixoo:
+    settings = Settings.get()
 
-
-def try_to_request(url):
-    try:
-        print(f'[{(datetime.now().strftime("%Y-%m-%d %H:%M:%S %z").strip())}] Trying to request "{url}" ... ', end='')
-
-        if requests.get(url).status_code == 200:
-            print('OK.')
-            return True
-    except:
-        print('FAILED.')
-        return False
-
-
-def divoom_api_call(endpoint, payload=None):
-    return requests.post(
-        f'{divoom_api_url}/{endpoint}',
-        json.dumps(payload)
+    return Pixoo(
+        settings.pixoo_host,
+        settings.pixoo_screen_size,
+        settings.pixoo_debug
     )
+
+
+def try_to_request(url: str) -> bool:
+    logger.info(f'initiating request to "{url}"')
+
+    result = requests.get(url).status_code == 200
+
+    if result:
+        logger.info(f'request to "{url}" succeeded')
+    else:
+        logger.error(f'request to "{url}" failed')
+
+    return result
+
+
+def handle_gif(gif: ImageFile.ImageFile, speed: int, skip_first_frame: bool) -> None:
+    pixoo = get_pixoo()
+
+    if gif.is_animated:
+        requests.post(f'http://{pixoo.ip_address}/post', json.dumps({
+            'Command': 'Draw/ResetHttpGifId'
+        }))
+
+        gif_frames = []
+
+        for i in range((1 if skip_first_frame else 0), gif.n_frames):
+            if len(gif_frames) == 59:
+                break
+
+            gif.seek(i)
+
+            if gif.size not in ((16, 16), (32, 32), (64, 64)):
+                gif_frames.append(gif.resize((pixoo.size, pixoo.size)).convert('RGB'))
+            else:
+                gif_frames.append(gif.convert('RGB'))
+
+        for offset, gif_frame in enumerate(gif_frames):
+            requests.post(f'http://{pixoo.ip_address}/post', json.dumps({
+                'Command': 'Draw/SendHttpGif',
+                'PicID': 1,
+                'PicNum': len(gif_frames),
+                'PicOffset': offset,
+                'PicWidth': gif_frame.width,
+                'PicSpeed': speed,
+                'PicData': base64.b64encode(gif_frame.tobytes()).decode('utf-8')
+            }))
+    else:
+        pixoo.draw_image(gif)
+        pixoo.push()

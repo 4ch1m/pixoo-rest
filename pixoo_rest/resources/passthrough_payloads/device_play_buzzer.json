@@ -1,0 +1,6 @@
+{
+  "Command": "Device/PlayBuzzer",
+  "ActiveTimeInCycle": 500,
+  "OffTimeInCycle": 500,
+  "PlayTotalTime": 3000
+}

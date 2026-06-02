@@ -1,8 +1,0 @@
-description: Get a list of all (Pixoo-)devices in your local network.
-
-responses:
-  '200':
-    description: OK
-
-tags:
-  - divoom

@@ -1,0 +1,6 @@
+{
+  "Command": "Device/SetWhiteBalance",
+  "RValue": 100,
+  "GValue": 100,
+  "BValue": 100
+}

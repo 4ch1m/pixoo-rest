@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PIXOO_REST_URL="http://localhost:5000"
+PIXOO_REST_URL="http://localhost:8000"
 
 SCREEN_SIZE_X=64
 SCREEN_SIZE_Y=64
@@ -8,8 +8,7 @@ SCREEN_SIZE_Y=64
 MAX_SCREEN_VALUE_X=$((SCREEN_SIZE_X - 1))
 MAX_SCREEN_VALUE_Y=$((SCREEN_SIZE_Y - 1))
 
-function progress_bar() {
-
+progress_bar() {
   curl -s -X POST \
     -d "r=0&g=0&b=0&push_immediately=false" \
     "${PIXOO_REST_URL}/fill"
@@ -26,15 +25,10 @@ function progress_bar() {
   curl -s -X POST \
     -d "text=${1}%20%25&x=0&y=0&r=255&g=255&b=255&push_immediately=true" \
     "${PIXOO_REST_URL}/text"
-
 }
 
 for i in {1..100}; do
-
-  # do something meaningful here ...
-
+  true # <== do something meaningful here instead
   progress_bar ${i} > /dev/null
-
   sleep 1
-
 done

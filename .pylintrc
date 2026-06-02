@@ -1,0 +1,12 @@
+[MESSAGES CONTROL]
+
+disable=missing-class-docstring,
+        missing-module-docstring,
+        missing-function-docstring,
+        line-too-long,
+        missing-timeout,
+        logging-fstring-interpolation
+
+[REPORTS]
+
+msg-template={abspath}:{line}: [{msg_id}({symbol}), {obj}] {msg}

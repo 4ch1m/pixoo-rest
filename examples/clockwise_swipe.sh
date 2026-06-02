@@ -1,10 +1,10 @@
 #!/bin/bash
 
-PIXOO_REST_URL="http://localhost:5000"
+PIXOO_REST_URL="http://localhost:8000"
 
 START_PARAMS="start_x=32&start_y=32"
 
-function swipe() {
+swipe() {
   local COLOR_PARAMS="r=${1}&g=${2}&b=${3}"
 
   for i in {-1..64}; do
@@ -30,7 +30,6 @@ function swipe() {
       -d "${START_PARAMS}&stop_x=-1&stop_y=${i}&${COLOR_PARAMS}&push_immediately=true" \
       "${PIXOO_REST_URL}/line"
   done
-
 }
 
 swipe 0 255 0 > /dev/null

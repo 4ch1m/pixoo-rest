@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: 4ch1m/pixoo-rest
   pullPolicy: IfNotPresent
-  tag: 1.6.2
+  tag: 2.0.0
 
 livenessProbe:
   delay: 5
@@ -15,7 +15,7 @@ livenessProbe:
 
 service:
   type: NodePort
-  port: 5000
+  port: 8000
 
 ingress:
   path: /pixoo-rest
@@ -25,7 +25,8 @@ environment:
   timezone: Europe/Berlin
   #
   pixoo_host: Pixoo64
-  pixoo_size: 64
+  pixoo_screen_size: 64
   pixoo_debug: false
+  pixoo_connection_check: true
+  pixoo_connection_check_retries: 10
   pixoo_rest_debug: false
-  pixoo_test_connection_retries: 10

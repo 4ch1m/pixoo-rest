@@ -1,0 +1,4 @@
+{
+  "Command": "Device/SetMirrorMode",
+  "Mode": 0
+}

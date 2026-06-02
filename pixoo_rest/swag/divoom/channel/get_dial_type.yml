@@ -1,8 +1,0 @@
-description: Get a list of all 'dial' types.
-
-responses:
-  '200':
-    description: OK
-
-tags:
-  - divoom

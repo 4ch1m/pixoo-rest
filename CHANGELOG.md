@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.0.0 (2026-06-02)
+
+**___ MAJOR UPDATE ___**
+
+* overall code rewrite due to migration from _Flask_ to [FastAPI](https://fastapi.tiangolo.com/)
+* new:
+  * [ReDoc](https://github.com/Redocly/redoc) integration
+  * environment setting to disable initial connection check (`PIXOO_CONNECTION_CHECK`)
+  * set custom user-agent string when using the download endpoints
+* various other code improvements/optimizations
+* updated dependencies
+
+**IMPORTANT NOTE**:  
+Several things regarding configuration have changed and need to be updated.  
+The default port of _Pixoo REST_ has changed from `5000` to `8000` (in order to align with _FastAPI_'s default).  
+Many environment variables (respectively their names) have also changed. Please (re-)check the [README](README.md) file and the [configuration section](https://github.com/4ch1m/pixoo-rest#configure) for details (e.g. `PIXOO_REST_ROOT_PATH` instead of `SCRIPT_PATH`, etc.).  
+The actual API endpoints should (mostly) remain backwards compatible; but please check if your client calls still work as expected.
+
 ## 1.6.2 (2026-04-25)
 
 * restructured code
@@ -24,9 +42,10 @@ the dependencies to `Flask`, `requests`, `pillow` and `python-dotenv` can now be
 
 ## 1.5.0 (2024-05-06)
 
-* new: (passthrough-)endpoint `sendHttpItemList`, which is available with the latest firmware update and offers drawing of multiple text-elements at once
-* new: custom `download/text` endpoint
-* new: Helm charts / K8s
+* new:
+  * (passthrough-)endpoint `sendHttpItemList`, which is available with the latest firmware update and offers drawing of multiple text-elements at once
+  * custom `download/text` endpoint
+  * Helm charts / K8s
 * improved handling for GIF file upload (automatically limit to 59 frames; following the restriction of the device/API)
 * updated dependencies
 * other minor improvements
@@ -55,7 +74,7 @@ the dependencies to `Flask`, `requests`, `pillow` and `python-dotenv` can now be
 
 ## 1.3.2 (2023-03-21)
 
-* fix dependency conflict (_flasgger_ requires _Pillow_ 9.2.0)
+* fix dependency conflict (`flasgger` requires `pillow` version `9.2.0`)
 
 ## 1.3.1 (2023-03-21)
 
@@ -64,7 +83,7 @@ the dependencies to `Flask`, `requests`, `pillow` and `python-dotenv` can now be
 
 ## 1.3.0 (2023-01-06)
 
-* new: 'divoom' section (query official [API](https://app.divoom-gz.com))
+* new "divoom" section (= query official [API](https://app.divoom-gz.com))
 * dependency updates
 * other minor improvements
 
@@ -72,22 +91,23 @@ the dependencies to `Flask`, `requests`, `pillow` and `python-dotenv` can now be
 
 * new environment settings `PIXOO_REST_HOST` and `PIXOO_REST_DEBUG` (see [README](README.md))
 * new passthrough-commands:
-  * GetDeviceTime
-  * SetDisTempMode
-  * SetTime24Flag
-  * setHighLightMode
-  * SetWhiteBalance
-  * GetWeatherInfo
-  * PlayBuzzer
+  * `GetDeviceTime`
+  * `SetDisTempMode`
+  * `SetTime24Flag`
+  * `setHighLightMode`
+  * `SetWhiteBalance`
+  * `GetWeatherInfo`
+  * `PlayBuzzer`
 * other minor improvements
 
 ## 1.1.0 (2022-10-05)
 
 * improved [Dockerfile](Dockerfile) (checkout of the pixoo-library's explicit commit-hash; which should correlate with the git-submodule and pin the actual dependencies)
-* new `screen/on/{true|false}` endpoint
-* new passthrough-commands:
-  * SetScreenRotationAngle
-  * SetMirrorMode
+* new:
+  * `screen/on/{true|false}` endpoint
+  * passthrough-commands:
+    * `SetScreenRotationAngle`
+    * `SetMirrorMode`
 * other minor improvements
 
 ## 1.0.0 (2022-03-05)

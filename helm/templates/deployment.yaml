@@ -20,26 +20,28 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - containerPort: 5000
+            - containerPort: 8000
           livenessProbe:
             httpGet:
               path: {{ .Values.ingress.path }}/health
-              port: 5000
+              port: 8000
             initialDelaySeconds: {{ .Values.livenessProbe.delay }}
             periodSeconds: {{ .Values.livenessProbe.period }}
           env:
             - name: TZ
               value: "{{ .Values.environment.timezone }}"
-            - name: SCRIPT_NAME
-              value: "{{ .Values.ingress.path }}"
             - name: PIXOO_HOST
               value: "{{ .Values.environment.pixoo_host }}"
+            - name: PIXOO_SCREEN_SIZE
+              value: "{{ .Values.environment.pixoo_screen_size }}"
             - name: PIXOO_DEBUG
               value: "{{ .Values.environment.pixoo_debug }}"
-            - name: PIXOO_SCREEN_SIZE
-              value: "{{ .Values.environment.pixoo_size }}"
+            - name: PIXOO_CONNECTION_CHECK
+              value: "{{ .Values.environment.pixoo_connection_check }}"
+            - name: PIXOO_CONNECTION_CHECK_RETRIES
+              value: "{{ .Values.environment.pixoo_connection_check_retries }}"
             - name: PIXOO_REST_DEBUG
               value: "{{ .Values.environment.pixoo_rest_debug }}"
-            - name: PIXOO_TEST_CONNECTION_RETRIES
-              value: "{{ .Values.environment.pixoo_test_connection_retries }}"
+            - name: PIXOO_REST_ROOT_PATH
+              value: "{{ .Values.ingress.path }}"
       restartPolicy: {{ .Values.restartPolicy }}

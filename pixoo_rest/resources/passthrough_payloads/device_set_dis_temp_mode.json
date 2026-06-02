@@ -1,0 +1,4 @@
+{
+  "Command": "Device/SetDisTempMode",
+  "Mode": 0
+}

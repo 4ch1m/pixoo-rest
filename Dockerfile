@@ -22,11 +22,12 @@ RUN pip install \
           --upgrade \
           --requirement requirements.txt
 
+COPY static static/
 COPY pixoo_rest pixoo_rest/
 COPY --from=git_clone /pixoo pixoo_rest/pixoo
 COPY version.txt .
 
 HEALTHCHECK --interval=5m --timeout=3s \
-    CMD curl --fail --silent http://localhost:5000/${SCRIPT_NAME}/health || exit 1
+    CMD curl --fail --silent http://localhost:8000/${SCRIPT_NAME}/health || exit 1
 
-CMD [ "gunicorn", "--bind", "0.0.0.0:5000", "pixoo_rest.main:app" ]
+CMD [ "fastapi", "run", "pixoo_rest" ]
