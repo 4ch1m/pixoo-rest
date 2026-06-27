@@ -1,9 +1,9 @@
 python-dotenv == 1.2.2
 requests == 2.34.2
 pillow == 12.2.0
-fastapi[standard] == 0.136.3
-python-multipart == 0.0.29
-pydantic-settings == 2.14.1
+fastapi[standard] == 0.138.1
+python-multipart == 0.0.32
+pydantic-settings == 2.14.2
 
 # NOTE: "Flask" is a dependency of the "pixoo" submodule
 Flask

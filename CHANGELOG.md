@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.1 (2026-06-27)
+
+* fixed submodule configuration
+* updated dependencies
+
 ## 2.0.0 (2026-06-02)
 
 **___ MAJOR UPDATE ___**

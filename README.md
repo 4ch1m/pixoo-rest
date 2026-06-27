@@ -146,6 +146,9 @@ or
 
 ### Direct
 
+> [!NOTE]
+> Using Python version >= `3.14` is recommended.
+
 Create a virtual environment and activate it (optional; but recommended):
 ```bash
 python3 -m venv .venv

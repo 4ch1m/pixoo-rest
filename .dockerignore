@@ -14,3 +14,4 @@ pixoo_rest/pixoo/
 /*.sh
 /*.yml
 LICENSE
+**/__pycache__/
