@@ -33,7 +33,7 @@ async def send_text(text_model: Annotated[TextModel, Form()]) -> ResponseModel:
 
 
 @router.post('/sendGif', description='NOTE: The GIF should have max 59 animation frames.', response_model=ResponseModel)
-async def send_gif(gif_model: GIFModel = Depends(), gif_file: UploadFile = File(description='The animated GIF image to display. (Automatically gets resized.)')) -> ResponseModel:
+async def send_gif(gif_model: Annotated[GIFModel, Depends()], gif_file: Annotated[UploadFile, File(description='The animated GIF image to display. (Automatically gets resized.)')]) -> ResponseModel:
     gif_data = await gif_file.read()
 
     handle_gif(

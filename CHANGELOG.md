@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.0 (2026-07-25)
+
+* switch to `uv` package/project manager
+* updated dependencies
+* minor code improvements
+
 ## 2.0.1 (2026-06-27)
 
 * fixed submodule configuration

@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: 4ch1m/pixoo-rest
   pullPolicy: IfNotPresent
-  tag: 2.0.0
+  tag: 2.1.0
 
 livenessProbe:
   delay: 5

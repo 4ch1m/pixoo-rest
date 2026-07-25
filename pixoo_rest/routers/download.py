@@ -21,7 +21,7 @@ pixoo = get_pixoo()
 @router.post('/download/gif', description='NOTE: The GIF should have max 60 animation frames.', response_model=ResponseModel)
 async def download_gif(gif_model: Annotated[GifModel, Form()], response: Response) -> ResponseModel:
     try:
-        response = requests.get(
+        _response = requests.get(
             url=gif_model.url,
             stream=True,
             timeout=gif_model.timeout,
@@ -29,13 +29,13 @@ async def download_gif(gif_model: Annotated[GifModel, Form()], response: Respons
             headers={"User-Agent": gif_model.user_agent}
         )
 
-        response.raise_for_status()
-    except (requests.exceptions.RequestException, OSError, IOError) as e:
+        _response.raise_for_status()
+    except (requests.exceptions.RequestException, OSError) as e:
         response.status_code = status.HTTP_424_FAILED_DEPENDENCY
         return ResponseModel(message=f'Error downloading the GIF: {e}')
 
     handle_gif(
-        gif=Image.open(response.raw),
+        gif=Image.open(_response.raw),
         speed=gif_model.animation_speed,
         skip_first_frame=gif_model.skip_first_frame,
     )
@@ -46,7 +46,7 @@ async def download_gif(gif_model: Annotated[GifModel, Form()], response: Respons
 @router.post('/download/image', response_model=ResponseModel)
 def download_image(image_model: Annotated[ImageModel, Form()], response: Response) -> ResponseModel:
     try:
-        response = requests.get(
+        _response = requests.get(
             url=image_model.url,
             stream=True,
             timeout=image_model.timeout,
@@ -54,13 +54,13 @@ def download_image(image_model: Annotated[ImageModel, Form()], response: Respons
             headers={"User-Agent": image_model.user_agent}
         )
 
-        response.raise_for_status()
-    except (requests.exceptions.RequestException, OSError, IOError) as e:
+        _response.raise_for_status()
+    except (requests.exceptions.RequestException, OSError) as e:
         response.status_code = status.HTTP_424_FAILED_DEPENDENCY
         return ResponseModel(message=f'Error downloading the image: {e}')
 
     pixoo.draw_image_at_location(
-        Image.open(response.raw),
+        Image.open(_response.raw),
         image_model.x,
         image_model.y
     )

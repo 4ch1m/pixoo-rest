@@ -2,7 +2,8 @@ import json
 
 from pathlib import Path
 from types import CoroutineType
-from typing import Annotated, Any, Callable
+from typing import Annotated, Any
+from collections.abc import Callable
 
 from fastapi import APIRouter, Body
 

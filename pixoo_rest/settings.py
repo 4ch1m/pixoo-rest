@@ -26,7 +26,7 @@ class Settings(BaseSettings, case_sensitive=False):
     divoom_api_url: str = 'https://app.divoom-gz.com'
 
     @staticmethod
-    @lru_cache()
+    @lru_cache
     def get() -> Settings:
         settings = Settings()
         logger.info(settings.model_dump_json(indent=4))

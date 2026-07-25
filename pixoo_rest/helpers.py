@@ -6,7 +6,8 @@ from functools import lru_cache
 
 import requests
 
-from PIL import ImageFile
+from PIL.ImageFile import ImageFile
+from PIL.GifImagePlugin import GifImageFile
 
 from .settings import Settings
 from .pixoo.src.pixoo.objects.pixoo import Pixoo
@@ -15,7 +16,7 @@ from .pixoo.src.pixoo.objects.pixoo import Pixoo
 logger = logging.getLogger(__name__)
 
 
-@lru_cache()
+@lru_cache
 def get_pixoo() -> Pixoo:
     settings = Settings.get()
 
@@ -39,10 +40,10 @@ def try_to_request(url: str) -> bool:
     return result
 
 
-def handle_gif(gif: ImageFile.ImageFile, speed: int, skip_first_frame: bool) -> None:
+def handle_gif(gif: ImageFile, speed: int, skip_first_frame: bool) -> None:
     pixoo = get_pixoo()
 
-    if gif.is_animated:
+    if isinstance(gif, GifImageFile) and gif.is_animated:
         requests.post(f'http://{pixoo.ip_address}/post', json.dumps({
             'Command': 'Draw/ResetHttpGifId'
         }))

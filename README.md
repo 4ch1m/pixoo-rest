@@ -138,7 +138,7 @@ DIVOOM_API_URL=https://app.divoom-gz.com
 ## Running
 
 The app can now be run ...
-* :snake: directly; using your existing (venv-)Python installation
+* :snake: directly; using `uv`
 
 or
 
@@ -147,28 +147,16 @@ or
 ### Direct
 
 > [!NOTE]
-> Using Python version >= `3.14` is recommended.
+> Make sure you have the "[uv](https://docs.astral.sh/uv/getting-started/installation/)" project-/package-manager installed on your system.
 
-Create a virtual environment and activate it (optional; but recommended):
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
+uv run fastapi run pixoo_rest
 ```
 
-Install all dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-Finally, run the app via `fastapi`:
-```bash
-fastapi run pixoo_rest
-```
-
-You may change the default host (`0.0.0.0`) and port (`8000`) settings using additional parameters, e.g.:
+You may change the default host and port (`0.0.0.0` / `8000`) settings using additional parameters, e.g.:
 
 ```bash
-fastapi run --host 127.0.0.1 --port 8080 pixoo_rest
+uv run fastapi run --host 127.0.0.1 --port 8080 pixoo_rest
 ```
 
 ### Containerized

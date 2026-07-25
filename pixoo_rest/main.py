@@ -1,9 +1,11 @@
 import sys
 import time
+import tomllib
 
 from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import Any, AsyncGenerator
+from typing import Any
+from collections.abc import AsyncGenerator
 
 from fastapi import FastAPI, Request
 from fastapi.responses import RedirectResponse, FileResponse, HTMLResponse
@@ -28,6 +30,9 @@ from pixoo_rest.routers import (
 )
 
 
+with open(Path(__file__).parent.parent / 'pyproject.toml', 'rb') as project_file:
+    project_metadata = tomllib.load(project_file)
+
 settings = Settings.get()
 
 
@@ -49,7 +54,7 @@ async def lifespan(_: FastAPI) -> AsyncGenerator[None, Any]:
 
 app = FastAPI(
     title='Pixoo REST',
-    version=(Path(__file__).parent.parent / Path('version.txt')).read_text(),
+    version=project_metadata['project']['version'],
     description='A RESTful API to easily interact with the Wi-Fi enabled {} devices.'.format(
         '<a href="https://www.divoom.com/de/products/pixoo-64">Divoom Pixoo</a>'
     ),
@@ -95,6 +100,7 @@ app = FastAPI(
 
 
 STATIC_RESOURCE_PATH = Path(__file__).parent.parent / Path('static')
+SWAGGER_UI_OAUTH2_REDIRECT_URL = '/docs/oauth2-redirect' if not app.swagger_ui_oauth2_redirect_url else app.swagger_ui_oauth2_redirect_url
 
 
 @app.get('/', include_in_schema=False)
@@ -124,7 +130,7 @@ async def custom_swagger_ui_html() -> HTMLResponse:
     )
 
 
-@app.get(app.swagger_ui_oauth2_redirect_url, include_in_schema=False)
+@app.get(SWAGGER_UI_OAUTH2_REDIRECT_URL, include_in_schema=False)
 async def swagger_ui_redirect() -> HTMLResponse:
     return get_swagger_ui_oauth2_redirect_html()
 

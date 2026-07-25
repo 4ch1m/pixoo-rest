@@ -10,4 +10,4 @@ logging.basicConfig(
     stream=sys.stdout
 )
 
-from .main import app
+from .main import app  # noqa: E402, F401

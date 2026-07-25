@@ -24,7 +24,7 @@ pixoo = get_pixoo()
 
 
 @router.post('/image', response_model=ResponseModel)
-async def image(image_model: ImageModel = Depends(), image_file: UploadFile = File(description='The image to display. (Automatically gets resized.)')) -> ResponseModel:
+async def image(image_model: Annotated[ImageModel, Depends()], image_file: Annotated[UploadFile, File(description='The image to display. (Automatically gets resized.)')]) -> ResponseModel:
     image_data = await image_file.read()
 
     pixoo.draw_image_at_location(
