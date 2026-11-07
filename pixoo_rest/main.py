@@ -63,9 +63,7 @@ app = FastAPI(
         'name': '4ch1m / GitHub',
         'url': 'https://github.com/4ch1m/pixoo-rest'
     },
-    base_path=settings.pixoo_rest_root_path,
-    url_prefix=settings.pixoo_rest_root_path,
-    tags_metadata=[
+    openapi_tags=[
         {
             'name': APITags.DRAW.value,
             'description': 'draw lines, pixels, rectangles, etc. on your Pixoo'
